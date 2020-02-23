@@ -1,9 +1,9 @@
 ![](https://github.com/puripuri2100/formatcls/workflows/Rust/badge.svg)
 
 
-# xml2saty-rust
+# formatcls
 
-This software converts xml file to SATySFi's document file.
+This software creates SATySFi's class file based on json file.
 
 
 # Install using Cargo
@@ -37,13 +37,13 @@ Please download [installer](https://www.rust-lang.org/tools/install), and starti
 
 ```sh
 git clone https://github.com/puripuri2100/formatcls.git
-cd xml2saty-rust
+cd formatcls
 
 make install
 ```
 
 
-# Usage of xml2saty-rust
+# Usage of formatcls
 
 Type
 
@@ -57,7 +57,7 @@ formatcls -c <config file> -o <output file>
 make demo
 ```
 
-If `example/gengou.saty` and `example/keihou.saty` are created, then the setup has been finished correctly.
+If `demo/demo.satyh` and `demo/demo.pdf` are created, then the setup has been finished correctly.
 
 ---
 
