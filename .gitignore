@@ -3,3 +3,6 @@
 t
 *.lock
 .vscode
+demo/*.pdf
+demo/*.satysfi-aux
+demo/demo.satyh

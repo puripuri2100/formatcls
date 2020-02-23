@@ -1,0 +1,27 @@
+{
+  "module": "Demo",
+  "page-size": "b5",
+  "left-space" : "40pt",
+  "right-space" : "40pt",
+  "top-space" : "40pt",
+  "bottom-space" : "40pt",
+  "main-font" : {
+    "size":"12pt",
+    "cjk-name":"Junicode",
+    "cjk-ratio":"0.88",
+    "cjk-correction":"0.",
+    "latin-name":"lmsans",
+    "latin-ratio":"1.",
+    "latin-correction":"0."
+  },
+  "font-data" : [
+    {
+      "tag":"bold",
+      "name":"fonts-noto-serif-cjk-jp:NotoSerifCJKjp-Bold",
+      "ratio":"1.0",
+      "correction":"0.0"
+    }
+  ],
+  "doc-fun-name" : "doc",
+  "config-data":[]
+}

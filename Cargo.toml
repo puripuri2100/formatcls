@@ -1,5 +1,5 @@
 [package]
-name = "formcls"
+name = "formatcls"
 version = "0.1.0"
 authors = ["puripuri2100 <puripuri2100@gmail.com>"]
 edition = "2018"

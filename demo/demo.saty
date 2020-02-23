@@ -1,0 +1,8 @@
+@import: demo
+
+Demo.doc (|
+  title = {タイトル};
+  author = {puripuri2100};
+|) '<
+  +p{text}
+>
