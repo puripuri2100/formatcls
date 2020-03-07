@@ -74,7 +74,9 @@ let main-font-cjk = (```{}```, {}, {})
 let main-font-latin = (```{}```, {}, {})
 
 "
-,main_font_size,main_font_name_cjk,main_font_ratio_cjk,main_font_correction_cjk,main_font_name_latin,main_font_ratio_latin,main_font_correction_latin)
+,main_font_size
+,main_font_name_cjk,main_font_ratio_cjk,main_font_correction_cjk
+,main_font_name_latin,main_font_ratio_latin,main_font_correction_latin)
 }
 
 pub fn set_set_fn () -> String {

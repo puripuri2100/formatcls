@@ -63,7 +63,7 @@ formatcls -c <json file> -o <output file>
 - right-space : 右側余白
 - top-space : 上側余白
 - bottom-space : 下側余白
-- main-fong : メインで使うフォントをcjkとlatinでそれぞれ設定します。以下の子データをあたえてください。
+- main-font : メインで使うフォントをcjkとlatinでそれぞれ設定します。以下の子データをあたえてください。
   - size : フォントサイズです。
   - cjk-name : cjk用のフォントの名前です。
   - cjk-ratio : cjkの拡大率です。
@@ -84,3 +84,9 @@ formatcls -c <json file> -o <output file>
   - name : フォントの名前です。
   - ratio : 拡大率です。
   - correction : 補正値です。
+
+デフォルトの設定が知りたい場合は`-d`オプションをつけて
+```sh
+formatcls -d <output file>
+```
+のように起動してください。
