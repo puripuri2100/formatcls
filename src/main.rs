@@ -59,11 +59,13 @@ fn main() {
   }
 
   let package_data: Vec<&str> = vec!["annot", "option", "list", "math", "gr", "color", "vdecoset"];
-  let header = config::require_package(package_data);
 
   let _ = match (&mut config_name, &mut output_name) {
     (Some(c), Some(o)) => {
       let config_data = config::parse(c);
+      let require_list = &config_data["require-list"];
+      let import_list = &config_data["import-list"];
+      let header = config::package(package_data, &require_list, &import_list);
       let module = body::module_name(&config_data);
       let (sig, body) = body::body(&config_data);
       let text = format!(
