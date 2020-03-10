@@ -84,6 +84,14 @@ formatcls -c <json file> -o <output file>
   - name : フォントの名前です。
   - ratio : 拡大率です。
   - correction : 補正値です。
+- require-package : `@require`で読み込むパッケージを指定する文字列のリストです。
+- import-package : `@import`で読み込むパッケージを指定する文字列のリストです。
+- header-fun : ヘッダーを作成する関数（型は`context -> int -> block-boxes`）を指定してください。デフォルトでは
+  - `make-header`
+  - `make-footer`
+  - `empty`
+  が用意されています。
+- hooter-fun : フッターを作成する関数を指定してください。`header-fun`と大体共通です。
 
 デフォルトの設定が知りたい場合は`-d`オプションをつけて
 ```sh
