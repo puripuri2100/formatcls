@@ -9,8 +9,8 @@ use std::io::Write;
 
 pub mod body;
 pub mod default;
-pub mod package;
 pub mod module;
+pub mod package;
 
 fn write_file(file_name: String, text: String) -> () {
   let mut file = File::create(file_name).unwrap();
@@ -24,7 +24,7 @@ fn parse(path: &str) -> Value {
 
 fn main() {
   let app = App::new("clapex")
-    .version("0.0.1")
+    .version("0.1.0")
     .arg(
       Arg::with_name("output")
         .help("Specify output file")
@@ -107,9 +107,6 @@ fn main() {
         package, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
       );
       write_file(o.to_string(), text);
-    }
-    (None, Some(_)) => {
-      panic!("!!!");
     }
     (_, _) => (),
   };

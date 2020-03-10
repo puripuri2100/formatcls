@@ -2,6 +2,7 @@ use serde_json::json;
 use serde_json::Value;
 
 pub const NAME_MAIN_FONT: &str = "main-font";
+pub const NAME_FONT_DATA: &str = "font-data";
 
 pub const NAME_SIZE: &str = "size";
 pub const NAME_CJK_NAME: &str = "cjk-name";
@@ -19,8 +20,8 @@ pub const DEFAULT_LATIN_NAME: &str = "Junicode";
 pub const DEFAULT_LATIN_RATIO: &str = "1.0";
 pub const DEFAULT_LATIN_CORRECTION: &str = "0.0";
 
-pub fn set_default_font() -> String {
-  let default_vec = vec![
+pub fn make_default_font_vec() -> Vec<(&'static str, &'static str, &'static str, &'static str)> {
+  let v = vec![
     ("roman", "Junicode", "1.0", "0.0"),
     ("bold", "Junicode-b", "1.0", "0.0"),
     ("italic", "Junicode-it", "1.0", "0.0"),
@@ -29,6 +30,11 @@ pub fn set_default_font() -> String {
     ("mincho", "ipaexm", "0.88", "0.0"),
     ("gothic", "ipaexg", "0.88", "0.0"),
   ];
+  v
+}
+
+pub fn set_default_font() -> String {
+  let default_vec = make_default_font_vec();
   let mut s = String::new();
   for (tag, name, ratio, correction) in default_vec.iter() {
     let st = format!(

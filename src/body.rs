@@ -72,6 +72,9 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     space_str,
     font::set_set_fn(),
     font::set_initial_context(),
+    func::make_register_cross_reference_fun(),
+    func::make_get_cross_reference_fun(),
+    func::make_register_location_frame_fun(),
     func::make_header(),
     func::make_footer(),
     doc::make_document_function(&document_function_name),
@@ -110,7 +113,22 @@ pub fn default_json() -> Value {
       font::NAME_LATIN_RATIO      : font::DEFAULT_LATIN_RATIO,
       font::NAME_LATIN_CORRECTION : font::DEFAULT_LATIN_CORRECTION,
     }),
+    font::NAME_FONT_DATA    : json!(to_font_data_vec(font::make_default_font_vec())),
   })
+}
+
+pub fn to_font_data_vec(vec: Vec<(&str, &str, &str, &str)>) -> Vec<Value> {
+  let mut stack: Vec<Value> = vec![];
+  for (tag, name, ratio, correction) in vec.iter() {
+    let j = json!({
+      "tag" : tag,
+      "name" : name,
+      "ratio" : ratio,
+      "correction" : correction,
+    });
+    stack.push(j)
+  }
+  stack
 }
 
 pub fn make_command_vec() -> Vec<String> {
