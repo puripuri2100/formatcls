@@ -6,70 +6,72 @@ pub mod doc;
 pub mod font;
 pub mod func;
 pub mod page;
-pub mod setting;
-
 
 pub fn body(v: &Value, document_function_name: &str) -> String {
-  let main_font_size = &v["main-font"]["font-size"]
+  let main_font_size = &v[font::NAME_MAIN_FONT][font::NAME_SIZE]
     .as_str()
-    .unwrap_or(setting::DEFAULT_FONT_SIZE);
-  let main_font_name_cjk = &v["main-font"]["cjk-name"].as_str().unwrap_or("hoge");
-  let main_font_ratio_cjk = &v["main-font"]["cjk-ratio"].as_str().unwrap_or("hoge");
-  let main_font_correction_cjk = &v["main-font"]["cjk-correction"].as_str().unwrap_or("hoge");
-  let main_font_name_latin = &v["main-font"]["latin-name"].as_str().unwrap_or("hoge");
-  let main_font_ratio_latin = &v["main-font"]["latin-ratio"].as_str().unwrap_or("hoge");
-  let main_font_correction_latin = &v["main-font"]["latin-correction"]
+    .unwrap_or(font::DEFAULT_SIZE);
+  let main_font_name_cjk = &v[font::NAME_MAIN_FONT][font::NAME_CJK_NAME]
     .as_str()
-    .unwrap_or("hoge");
+    .unwrap_or(font::DEFAULT_CJK_NAME);
+  let main_font_ratio_cjk = &v[font::NAME_MAIN_FONT][font::NAME_CJK_RATIO]
+    .as_str()
+    .unwrap_or(font::DEFAULT_CJK_RATIO);
+  let main_font_correction_cjk = &v[font::NAME_MAIN_FONT][font::NAME_CJK_CORRECTION]
+    .as_str()
+    .unwrap_or(font::DEFAULT_CJK_CORRECTION);
+  let main_font_name_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_NAME]
+    .as_str()
+    .unwrap_or(font::DEFAULT_LATIN_NAME);
+  let main_font_ratio_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
+    .as_str()
+    .unwrap_or(font::DEFAULT_LATIN_CORRECTION);
+  let main_font_correction_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
+    .as_str()
+    .unwrap_or(font::DEFAULT_LATIN_CORRECTION);
+  let main_font_str = font::make_main_font_str(
+    &main_font_size,
+    &main_font_name_cjk,
+    &main_font_ratio_cjk,
+    &main_font_correction_cjk,
+    &main_font_name_latin,
+    &main_font_ratio_latin,
+    &main_font_correction_latin,
+  );
 
-  let top_space = &v["top-space"]
+  let top_space = &v[page::NAME_TOP_SPACE]
     .as_str()
-    .unwrap_or(setting::DEFAULT_TOP_SPACE);
-  let bottom_space = &v["bottom-space"]
+    .unwrap_or(page::DEFAULT_TOP_SPACE);
+  let bottom_space = &v[page::NAME_BOTTOM_SPACE]
     .as_str()
-    .unwrap_or(setting::DEFAULT_BOTTOM_SPACE);
-  let left_space = &v["left-space"]
+    .unwrap_or(page::DEFAULT_BOTTOM_SPACE);
+  let left_space = &v[page::NAME_LEFT_SPACE]
     .as_str()
-    .unwrap_or(setting::DEFAULT_LEFT_SPACE);
-  let right_space = &v["right-space"]
+    .unwrap_or(page::DEFAULT_LEFT_SPACE);
+  let right_space = &v[page::NAME_RIGHT_SPACE]
     .as_str()
-    .unwrap_or(setting::DEFAULT_RIGHT_SPACE);
+    .unwrap_or(page::DEFAULT_RIGHT_SPACE);
+  let space_str = page::make_space_str(top_space, bottom_space, left_space, right_space);
 
-
-    let page_width = &v[page::NAME_PAGE_WIDTH]
+  let page_width = &v[page::NAME_PAGE_WIDTH]
     .as_str()
     .unwrap_or(page::DEFAULT_PAGE_WIDTH);
   let page_height = &v[page::NAME_PAGE_HEIGHT]
     .as_str()
     .unwrap_or(page::DEFAULT_PAGE_HEIGHT);
   let page_size = &v[page::NAME_PAGE_SIZE].as_str();
-  let page_size_str = page::set_page_size(page_size, page_width, page_height);
+  let page_size_str = page::make_page_size_str(page_size, page_width, page_height);
 
   let font_data = &v["font-data"].as_array();
 
-  let document_config_data = &v["config-data"].as_array();
-
   let def_value_vec = vec![
-    setting::set_main_font(
-      &main_font_size,
-      &main_font_name_cjk,
-      &main_font_ratio_cjk,
-      &main_font_correction_cjk,
-      &main_font_name_latin,
-      &main_font_ratio_latin,
-      &main_font_correction_latin,
-    ),
+    main_font_str,
     font::set_default_font(),
     font::set_font_data(&font_data),
     page_size_str,
-    setting::make_let("top-space", &top_space),
-    setting::make_let("bottom-space", &bottom_space),
-    setting::make_let("left-space", &left_space),
-    setting::make_let("right-space", &right_space),
-    setting::make_let("text-height", " page-height -' top-space -' bottom-space"),
-    setting::make_let("text-width", " page-width -' left-space -' right-space"),
-    setting::set_set_fn(),
-    setting::set_initial_context(),
+    space_str,
+    font::set_set_fn(),
+    font::set_initial_context(),
     func::make_header(),
     func::make_footer(),
     doc::make_document_function(&document_function_name),
@@ -92,14 +94,22 @@ fn vec_to_str(v: &Vec<String>) -> String {
 
 pub fn default_json() -> Value {
   json!({
-    "font-size": setting::DEFAULT_FONT_SIZE,
-    page::NAME_PAGE_WIDTH : page::DEFAULT_PAGE_WIDTH,
-    page::NAME_PAGE_HEIGHT : page::DEFAULT_PAGE_HEIGHT,
-    page::NAME_PAGE_SIZE : page::DEFAULT_PAGE_SIZE,
-    "top-space" : setting::DEFAULT_TOP_SPACE,
-    "bottom-space" : setting::DEFAULT_BOTTOM_SPACE,
-    "left-space" : setting::DEFAULT_LEFT_SPACE,
-    "right-space" : setting::DEFAULT_RIGHT_SPACE,
+    page::NAME_PAGE_WIDTH   : page::DEFAULT_PAGE_WIDTH,
+    page::NAME_PAGE_HEIGHT  : page::DEFAULT_PAGE_HEIGHT,
+    page::NAME_PAGE_SIZE    : page::DEFAULT_PAGE_SIZE,
+    page::NAME_TOP_SPACE    : page::DEFAULT_TOP_SPACE,
+    page::NAME_BOTTOM_SPACE : page::DEFAULT_BOTTOM_SPACE,
+    page::NAME_LEFT_SPACE   : page::DEFAULT_LEFT_SPACE,
+    page::NAME_RIGHT_SPACE  : page::DEFAULT_RIGHT_SPACE,
+    font::NAME_MAIN_FONT    : json!({
+      font::NAME_SIZE             : font::DEFAULT_SIZE,
+      font::NAME_CJK_NAME         : font::DEFAULT_CJK_NAME,
+      font::NAME_CJK_RATIO        : font::DEFAULT_CJK_RATIO,
+      font::NAME_CJK_CORRECTION   : font::DEFAULT_CJK_CORRECTION,
+      font::NAME_LATIN_NAME       : font::DEFAULT_LATIN_NAME,
+      font::NAME_LATIN_RATIO      : font::DEFAULT_LATIN_RATIO,
+      font::NAME_LATIN_CORRECTION : font::DEFAULT_LATIN_CORRECTION,
+    })
   })
 }
 

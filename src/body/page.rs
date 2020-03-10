@@ -6,7 +6,7 @@ pub const DEFAULT_PAGE_WIDTH: &str = "210mm";
 pub const DEFAULT_PAGE_HEIGHT: &str = "297mm";
 pub const DEFAULT_PAGE_SIZE: &str = "a4";
 
-pub fn set_page_size(p: &Option<&str>, w: &str, h: &str) -> String {
+pub fn make_page_size_str(p: &Option<&str>, w: &str, h: &str) -> String {
   match p {
     Some("a0") => make_page_size_let("841mm", "1189mm"),
     Some("a1") => make_page_size_let("594mm", "841mm"),
@@ -62,14 +62,45 @@ pub fn make_let(n: &str, v: &str) -> String {
   format!("let {} = {}\n", n, v)
 }
 
+pub const NAME_TOP_SPACE: &str = "top-space";
+pub const NAME_BOTTOM_SPACE: &str = "bottom-space";
+pub const NAME_LEFT_SPACE: &str = "left-space";
+pub const NAME_RIGHT_SPACE: &str = "right-space";
+
+pub const DEFAULT_TOP_SPACE: &str = "20pt";
+pub const DEFAULT_BOTTOM_SPACE: &str = "20pt";
+pub const DEFAULT_LEFT_SPACE: &str = "20pt";
+pub const DEFAULT_RIGHT_SPACE: &str = "20pt";
+
+pub fn make_space_str(
+  top_space: &str,
+  bottom_space: &str,
+  left_space: &str,
+  right_space: &str,
+) -> String {
+  let v = vec![
+    make_let("top-space", &top_space),
+    make_let("bottom-space", &bottom_space),
+    make_let("left-space", &left_space),
+    make_let("right-space", &right_space),
+    make_let("text-height", " page-height -' top-space -' bottom-space"),
+    make_let("text-width", " page-width -' left-space -' right-space"),
+  ];
+  let mut main_str = String::new();
+  for s in v.iter() {
+    main_str.push_str(&s)
+  }
+  main_str
+}
+
 #[test]
 fn check_set_page_size() {
   assert_eq!(
-    set_page_size(&Some("a4"), "240mm", "100mm"),
+    make_page_size_str(&Some("a4"), "240mm", "100mm"),
     "let page-width = 210mm\nlet page-height = 297mm\n\n".to_string()
   );
   assert_eq!(
-    set_page_size(&None, "240mm", "100mm"),
+    make_page_size_str(&None, "240mm", "100mm"),
     "let page-width = 240mm\nlet page-height = 100mm\n\n".to_string()
   );
 }
