@@ -117,3 +117,6 @@ fn vec_to_str(v: &Vec<String>) -> String {
   }
   s
 }
+pub fn default_vec() -> Vec<(String, String)> {
+  vec![]
+}

@@ -1,9 +1,7 @@
 use serde_json::Value;
-use std::fs;
 
-pub fn parse(path: &str) -> Value {
-  let data = fs::read_to_string(path).unwrap();
-  serde_json::from_str(&data).unwrap()
+pub fn default_vec() -> Vec<(String, String)> {
+  vec![]
 }
 
 pub fn package(default: Vec<&str>, require: &Value, import: &Value) -> String {
