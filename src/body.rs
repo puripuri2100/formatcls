@@ -6,6 +6,8 @@ pub mod doc;
 pub mod font;
 pub mod func;
 pub mod page;
+pub mod sec;
+pub mod toc;
 
 pub fn body(v: &Value, document_function_name: &str) -> String {
   let main_font_size = &v[font::NAME_MAIN_FONT][font::NAME_SIZE]
@@ -23,7 +25,7 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
   let main_font_name_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_NAME]
     .as_str()
     .unwrap_or(font::DEFAULT_LATIN_NAME);
-  let main_font_ratio_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
+  let main_font_ratio_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_RATIO]
     .as_str()
     .unwrap_or(font::DEFAULT_LATIN_CORRECTION);
   let main_font_correction_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
@@ -71,6 +73,32 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     .as_str()
     .unwrap_or(doc::DEFAULT_FOOTER_FUN);
 
+  let toc_depth = &v[toc::NAME_TOC_DEPTH]
+    .as_u64()
+    .unwrap_or(toc::DEFAULT_TOC_DEPTH);
+  let toc_fun = &v[toc::NAME_TOC_FUN]
+    .as_str()
+    .unwrap_or(toc::DEFAULT_TOC_FUN);
+  let sec_depth = &v[sec::NAME_SEC_DEPTH]
+    .as_u64()
+    .unwrap_or(sec::DEFAULT_SEC_DEPTH);
+  let sec_fun_list = json_vec_to_str_vec(
+    &v[sec::NAME_SEC_FUN_NAME]
+      .as_array()
+      .unwrap_or(&vec![json!(null)]),
+    None,
+  );
+  let sec_fun = &v[sec::NAME_SEC_FUN]
+    .as_str()
+    .unwrap_or(sec::DEFAULT_SEC_FUN);
+
+  let toc_str = if toc_depth > sec_depth {
+    toc::make_toc_str(sec_depth, toc_fun)
+  } else {
+    toc::make_toc_str(toc_depth, toc_fun)
+  };
+  let sec_str = sec::make_sec_str(sec_depth, toc_depth, sec_fun_list, sec_fun);
+
   let def_value_vec = vec![
     main_font_str,
     font::set_default_font(),
@@ -85,8 +113,15 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     func::make_toc_and_outline_lst(),
     command::DEF_REF_CMD.to_string(),
     command::DEF_REF_PAGE_CMD.to_string(),
+    toc_str,
     func::make_header_footer_fun(),
-    doc::make_document_function(&document_function_name, header_fun, footer_fun),
+    sec_str,
+    doc::make_document_function(
+      &document_function_name,
+      toc::make_toc_fun_str(),
+      header_fun,
+      footer_fun,
+    ),
     command::DEF_P_CMD.to_string(),
     command::DEF_PN_CMD.to_string(),
   ];
@@ -123,8 +158,13 @@ pub fn default_json() -> Value {
       font::NAME_LATIN_CORRECTION : font::DEFAULT_LATIN_CORRECTION,
     }),
     font::NAME_FONT_DATA    : json!(to_font_data_vec(font::make_default_font_vec())),
-    doc::NAME_HEADER_FUN    :doc::DEFAULT_HEADER_FUN,
-    doc::NAME_FOOTER_FUN    :doc::DEFAULT_FOOTER_FUN,
+    doc::NAME_HEADER_FUN    : doc::DEFAULT_HEADER_FUN,
+    doc::NAME_FOOTER_FUN    : doc::DEFAULT_FOOTER_FUN,
+    toc::NAME_TOC_DEPTH     : toc::DEFAULT_TOC_DEPTH,
+    toc::NAME_TOC_FUN       : toc::DEFAULT_TOC_FUN,
+    sec::NAME_SEC_DEPTH     : sec::DEFAULT_SEC_DEPTH,
+    sec::NAME_SEC_FUN_NAME  : sec::default_sec_fun_name(),
+    sec::NAME_SEC_FUN       : sec::DEFAULT_SEC_FUN,
   })
 }
 
@@ -142,12 +182,40 @@ pub fn to_font_data_vec(vec: Vec<(&str, &str, &str, &str)>) -> Vec<Value> {
   stack
 }
 
-pub fn make_command_vec() -> Vec<String> {
-  let def_module_vec = vec![
+pub fn make_command_vec(v: &Value) -> Vec<String> {
+  let mut def_module_vec = vec![
     command::DIRECT_REF_CMD.to_string(),
     command::DIRECT_REF_PAGE_CMD.to_string(),
     command::DIRECT_P_CMD.to_string(),
     command::DIRECT_PN_CMD.to_string(),
   ];
+  let sec_depth = &v[sec::NAME_SEC_DEPTH]
+    .as_u64()
+    .unwrap_or(sec::DEFAULT_SEC_DEPTH);
+  let sec_fun_list = json_vec_to_str_vec(
+    &v[sec::NAME_SEC_FUN_NAME]
+      .as_array()
+      .unwrap_or(&vec![json!(null)]),
+    None,
+  );
+  let mut sec_command_vec = sec::command_vec(sec_depth, sec_fun_list);
+  let () = def_module_vec.append(&mut sec_command_vec);
   def_module_vec
+}
+
+fn json_vec_to_str_vec(j_vec: &Vec<Value>, default: Option<&str>) -> Vec<String> {
+  let mut s_vec = vec![];
+  let len = j_vec.len();
+  for i in 0..len {
+    let v = &j_vec[i];
+    let s_op = v.as_str();
+    match s_op {
+      None => match default {
+        None => {}
+        Some(s) => s_vec.push(format!("{}", s)),
+      },
+      Some(s) => s_vec.push(format!("{}", s)),
+    }
+  }
+  s_vec
 }

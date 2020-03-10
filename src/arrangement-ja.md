@@ -8,3 +8,5 @@
     - doc.rs : ドキュメント関数
     - page.rs : ページサイズ関係
     - func.rs : デフォルト関数作成
+    - sec.rs : 節関係
+    - toc.rs : 目次関係

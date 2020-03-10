@@ -99,7 +99,7 @@ fn main() {
       let module_name = &config_data[module::NAME_MODULE_NAME]
         .as_str()
         .unwrap_or(module::DEFAULT_MODULE_NAME);
-      let command_vec = body::make_command_vec();
+      let command_vec = body::make_command_vec(&config_data);
       let sig = module::make_sig(doc_fun_name, command_vec);
       let body = body::body(&config_data, doc_fun_name);
       let text = format!(
