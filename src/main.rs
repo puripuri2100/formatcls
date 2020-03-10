@@ -93,11 +93,18 @@ fn main() {
         json_vec_to_str_vec(require_list, header::DEFAULT_REQUIRE_PACKAGE_VEC_STR),
         json_vec_to_str_vec(import_list, header::DEFAULT_IMPORT_PACKAGE_VEC_STR),
       );
-      let module = body::module_name(&config_data);
-      let (sig, body) = body::body(&config_data);
+      let doc_fun_name = &config_data[module::NAME_DOC_FUNCTION_NAME]
+        .as_str()
+        .unwrap_or(module::DEFAULT_DOC_FUNCTION_NAME);
+      let module_name = &config_data[module::NAME_MODULE_NAME]
+        .as_str()
+        .unwrap_or(module::DEFAULT_MODULE_NAME);
+      let command_vec = body::make_command_vec();
+      let sig = module::make_sig(doc_fun_name, command_vec);
+      let body = body::body(&config_data);
       let text = format!(
-        "{}\nmodule {} : sig\n{}\nend = struct\n{}\nend",
-        header, module, sig, body
+        "{}\nmodule {} : sig\n{}\nend = struct\n{}\nend\n let {} = {}.{}\n",
+        header, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
       );
       write_file(o.to_string(), text);
     }

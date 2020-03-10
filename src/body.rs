@@ -7,12 +7,7 @@ pub mod font;
 pub mod func;
 pub mod setting;
 
-pub fn module_name(v: &Value) -> String {
-  let s = &v["module"].as_str().unwrap_or(setting::DEFAULT_MODULE_NAME);
-  s.to_string()
-}
-
-pub fn body(v: &Value) -> (String, String) {
+pub fn body(v: &Value) -> String {
   let page_width = &v["page-width"]
     .as_str()
     .unwrap_or(setting::DEFAULT_PAGE_WIDTH);
@@ -53,12 +48,6 @@ pub fn body(v: &Value) -> (String, String) {
     .unwrap_or(setting::DEFAULT_DOCUMENT_FUNCTION_NAME);
   let document_config_data = &v["config-data"].as_array();
 
-  let def_module_vec = vec![
-    command::set_doc(&document_function_name, &document_config_data),
-    command::DIRECT_P_CMD.to_string(),
-    command::DIRECT_PN_CMD.to_string(),
-  ];
-
   let def_value_vec = vec![
     setting::set_main_font(
       &main_font_size,
@@ -86,9 +75,18 @@ pub fn body(v: &Value) -> (String, String) {
     command::DEF_P_CMD.to_string(),
     command::DEF_PN_CMD.to_string(),
   ];
-  let module_str = vec_to_str(&def_module_vec);
   let value_str = vec_to_str(&def_value_vec);
-  (module_str, value_str)
+  value_str
+}
+
+fn vec_to_str(v: &Vec<String>) -> String {
+  let len = v.len();
+  let mut s = String::new();
+  for i in 0..len {
+    let st = format!("{}", v[i]);
+    s.push_str(&st)
+  }
+  s
 }
 
 pub fn default_json() -> Value {
@@ -104,12 +102,10 @@ pub fn default_json() -> Value {
   })
 }
 
-fn vec_to_str(v: &Vec<String>) -> String {
-  let len = v.len();
-  let mut s = String::new();
-  for i in 0..len {
-    let st = format!("{}", v[i]);
-    s.push_str(&st)
-  }
-  s
+pub fn make_command_vec() -> Vec<String> {
+  let def_module_vec = vec![
+    command::DIRECT_P_CMD.to_string(),
+    command::DIRECT_PN_CMD.to_string(),
+  ];
+  def_module_vec
 }
