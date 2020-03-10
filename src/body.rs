@@ -5,17 +5,22 @@ pub mod command;
 pub mod doc;
 pub mod font;
 pub mod func;
+pub mod page;
 pub mod setting;
 
-pub fn body(v: &Value,document_function_name:&str) -> String {
-  let page_width = &v["page-width"]
-    .as_str()
-    .unwrap_or(setting::DEFAULT_PAGE_WIDTH);
-  let page_height = &v["page-height"]
-    .as_str()
-    .unwrap_or(setting::DEFAULT_PAGE_HEIGHT);
-  let page_size = &v["page-size"].as_str();
+pub const NAME_PAGE_WIDTH: &str = page::NAME_PAGE_WIDTH;
+pub const NAME_PAGE_HEIGHT: &str = page::NAME_PAGE_HEIGHT;
+pub const NAME_PAGE_SIZE: &str = page::NAME_PAGE_SIZE;
 
+pub const DEFAULT_PAGE_WIDTH: &str = page::DEFAULT_PAGE_WIDTH;
+pub const DEFAULT_PAGE_HEIGHT: &str = page::DEFAULT_PAGE_HEIGHT;
+pub const DEFAULT_PAGE_SIZE: &str = page::DEFAULT_PAGE_SIZE;
+
+pub fn set_page_size(p: &Option<&str>, w: &str, h: &str) -> String {
+  page::set_page_size(p, w, h)
+}
+
+pub fn body(v: &Value, document_function_name: &str, page_size_str: String) -> String {
   let main_font_size = &v["main-font"]["font-size"]
     .as_str()
     .unwrap_or(setting::DEFAULT_FONT_SIZE);
@@ -57,7 +62,7 @@ pub fn body(v: &Value,document_function_name:&str) -> String {
     ),
     font::set_default_font(),
     font::set_font_data(&font_data),
-    setting::set_page_size(&page_size, &page_width, &page_height),
+    page_size_str,
     setting::make_let("top-space", &top_space),
     setting::make_let("bottom-space", &bottom_space),
     setting::make_let("left-space", &left_space),
@@ -89,9 +94,9 @@ fn vec_to_str(v: &Vec<String>) -> String {
 pub fn default_json() -> Value {
   json!({
     "font-size": setting::DEFAULT_FONT_SIZE,
-    "page-width" : setting::DEFAULT_PAGE_WIDTH,
-    "page-height" : setting::DEFAULT_PAGE_HEIGHT,
-    "page-size" : setting::DEFAULT_PAGE_SIZE,
+    NAME_PAGE_WIDTH : DEFAULT_PAGE_WIDTH,
+    NAME_PAGE_HEIGHT : DEFAULT_PAGE_HEIGHT,
+    NAME_PAGE_SIZE : DEFAULT_PAGE_SIZE,
     "top-space" : setting::DEFAULT_TOP_SPACE,
     "bottom-space" : setting::DEFAULT_BOTTOM_SPACE,
     "left-space" : setting::DEFAULT_LEFT_SPACE,
