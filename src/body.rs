@@ -93,12 +93,10 @@ pub fn body(v: &Value) -> (String, String) {
 
 pub fn default_json() -> Value {
   json!({
-    "module" : setting::DEFAULT_MODULE_NAME,
     "font-size": setting::DEFAULT_FONT_SIZE,
     "page-width" : setting::DEFAULT_PAGE_WIDTH,
     "page-height" : setting::DEFAULT_PAGE_HEIGHT,
     "page-size" : setting::DEFAULT_PAGE_SIZE,
-    "doc-fun-name" : setting::DEFAULT_DOCUMENT_FUNCTION_NAME,
     "top-space" : setting::DEFAULT_TOP_SPACE,
     "bottom-space" : setting::DEFAULT_BOTTOM_SPACE,
     "left-space" : setting::DEFAULT_LEFT_SPACE,

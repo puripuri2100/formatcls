@@ -1,6 +1,7 @@
 extern crate clap;
 
 use clap::{App, Arg};
+use serde_json::json;
 use serde_json::Value;
 use std::fs;
 use std::fs::File;
@@ -67,14 +68,33 @@ fn main() {
     print!("Output for default: {}\n", default);
   }
 
-  let package_data: Vec<&str> = vec!["annot", "option", "list", "math", "gr", "color", "vdecoset"];
+  let package_data = vec![
+    "annot".to_string(),
+    "option".to_string(),
+    "list".to_string(),
+    "math".to_string(),
+    "gr".to_string(),
+    "color".to_string(),
+    "vdecoset".to_string(),
+  ];
 
   let _ = match (&mut config_name, &mut output_name) {
     (Some(c), Some(o)) => {
       let config_data = parse(c);
-      let require_list = &config_data["require-package"];
-      let import_list = &config_data["import-package"];
-      let header = header::package(package_data, &require_list, &import_list);
+      let json_null_vec = vec![json!(null)];
+      let require_list = config_data["require-package"]
+        .as_array()
+        .unwrap_or(&json_null_vec)
+        .clone();
+      let import_list = config_data["import-package"]
+        .as_array()
+        .unwrap_or(&json_null_vec)
+        .clone();
+      let header = header::package(
+        package_data,
+        json_vec_to_str_vec(&require_list, None),
+        json_vec_to_str_vec(&import_list, None),
+      );
       let module = body::module_name(&config_data);
       let (sig, body) = body::body(&config_data);
       let text = format!(
@@ -89,18 +109,31 @@ fn main() {
     (_, _) => (),
   };
 
-  let default_json =
-    default::merge_default_json(
-      header::default_json(),
-      module::default_json(),
-      body::default_json(),
-    );
+  let default_json = default::merge_default_json(
+    header::default_json(),
+    module::default_json(),
+    body::default_json(),
+  );
 
   let _ = match default_name {
     None => {}
-    Some(s) => write_file(
-      s,
-      default_json.to_string(),
-    ),
+    Some(s) => write_file(s, default_json.to_string()),
   };
+}
+
+fn json_vec_to_str_vec(j_vec: &Vec<Value>, default: Option<&str>) -> Vec<String> {
+  let mut s_vec = vec![];
+  let len = j_vec.len();
+  for i in 0..len {
+    let v = &j_vec[i];
+    let s_op = v.as_str();
+    match s_op {
+      None => match default {
+        None => {}
+        Some(s) => s_vec.push(format!("{}", s)),
+      },
+      Some(s) => s_vec.push(format!("{}", s)),
+    }
+  }
+  s_vec
 }
