@@ -109,7 +109,7 @@ pub fn default_json() -> Value {
       font::NAME_LATIN_NAME       : font::DEFAULT_LATIN_NAME,
       font::NAME_LATIN_RATIO      : font::DEFAULT_LATIN_RATIO,
       font::NAME_LATIN_CORRECTION : font::DEFAULT_LATIN_CORRECTION,
-    })
+    }),
   })
 }
 

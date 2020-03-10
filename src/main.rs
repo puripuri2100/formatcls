@@ -9,7 +9,7 @@ use std::io::Write;
 
 pub mod body;
 pub mod default;
-pub mod header;
+pub mod package;
 pub mod module;
 
 fn write_file(file_name: String, text: String) -> () {
@@ -82,16 +82,16 @@ fn main() {
     (Some(c), Some(o)) => {
       let config_data = parse(c);
       let json_null_vec = vec![json!(null)];
-      let require_list = config_data[header::NAME_REQUIRE_PACKAGE]
+      let require_list = config_data[package::NAME_REQUIRE_PACKAGE]
         .as_array()
         .unwrap_or(&json_null_vec);
-      let import_list = config_data[header::NAME_IMPORT_PACKAGE]
+      let import_list = config_data[package::NAME_IMPORT_PACKAGE]
         .as_array()
         .unwrap_or(&json_null_vec);
-      let header = header::package(
+      let package = package::package(
         package_data,
-        json_vec_to_str_vec(require_list, header::DEFAULT_REQUIRE_PACKAGE_VEC_STR),
-        json_vec_to_str_vec(import_list, header::DEFAULT_IMPORT_PACKAGE_VEC_STR),
+        json_vec_to_str_vec(require_list, package::DEFAULT_REQUIRE_PACKAGE_VEC_STR),
+        json_vec_to_str_vec(import_list, package::DEFAULT_IMPORT_PACKAGE_VEC_STR),
       );
       let doc_fun_name = &config_data[module::NAME_DOC_FUNCTION_NAME]
         .as_str()
@@ -104,7 +104,7 @@ fn main() {
       let body = body::body(&config_data, doc_fun_name);
       let text = format!(
         "{}\nmodule {} : sig\n{}\nend = struct\n{}\nend\n let {} = {}.{}\n",
-        header, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
+        package, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
       );
       write_file(o.to_string(), text);
     }
@@ -115,7 +115,7 @@ fn main() {
   };
 
   let default_json = default::merge_default_json(
-    header::default_json(),
+    package::default_json(),
     module::default_json(),
     body::default_json(),
   );

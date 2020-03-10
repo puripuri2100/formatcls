@@ -1,6 +1,6 @@
 - main.rs : 入出力管理，JSONデータ扱うのはここだけ
   - default.rs : デフォルトの値を作成する関数を提供
-  - header.rs : パッケージ部分の作成
+  - pakcage.rs : パッケージ部分の作成
   - module.rs : モジュール作成用巻関数提供
   - body.rs : 中身作成、データ提供
     - commands.rs : コマンド作成
