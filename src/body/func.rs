@@ -1,15 +1,8 @@
-pub fn make_header() -> String {
+pub fn make_header_footer_fun() -> String {
   "
 
 let make-header ctx n =
   block-nil
-
-  "
-  .to_string()
-}
-
-pub fn make_footer() -> String {
-  "
 
 let make-footer ctx n =
   let ib-num = n |> arabic |> embed-string |> read-inline ctx in
@@ -17,7 +10,9 @@ let make-footer ctx n =
   let main-bb = line-break true true ctx main-ib in
     block-skip 0pt +++ main-bb
 
-"
+let empty ctx n = block-nil
+
+  "
   .to_string()
 }
 
@@ -76,6 +71,16 @@ pub fn make_register_location_frame_fun() -> String {
     inline-frame-breakable (0pt, 0pt, 0pt, 0pt)
       (Annot.link-to-location-frame s-key None) ib
 
+"
+  .to_string()
+}
+
+pub fn make_toc_and_outline_lst() -> String {
+  "
+  let-mutable toc-lst-ref <- []
+  let-mutable fig-lst-ref <- []
+  let-mutable table-lst-ref <- []
+  let-mutable outline-lst-ref <- []
 "
   .to_string()
 }

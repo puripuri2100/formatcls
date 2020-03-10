@@ -62,7 +62,14 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
   let page_size = &v[page::NAME_PAGE_SIZE].as_str();
   let page_size_str = page::make_page_size_str(page_size, page_width, page_height);
 
-  let font_data = &v["font-data"].as_array();
+  let font_data = &v[font::NAME_FONT_DATA].as_array();
+
+  let header_fun = &v[doc::NAME_HEADER_FUN]
+    .as_str()
+    .unwrap_or(doc::DEFAULT_HEADER_FUN);
+  let footer_fun = &v[doc::NAME_FOOTER_FUN]
+    .as_str()
+    .unwrap_or(doc::DEFAULT_FOOTER_FUN);
 
   let def_value_vec = vec![
     main_font_str,
@@ -75,11 +82,11 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     func::make_register_cross_reference_fun(),
     func::make_get_cross_reference_fun(),
     func::make_register_location_frame_fun(),
+    func::make_toc_and_outline_lst(),
     command::DEF_REF_CMD.to_string(),
     command::DEF_REF_PAGE_CMD.to_string(),
-    func::make_header(),
-    func::make_footer(),
-    doc::make_document_function(&document_function_name),
+    func::make_header_footer_fun(),
+    doc::make_document_function(&document_function_name, header_fun, footer_fun),
     command::DEF_P_CMD.to_string(),
     command::DEF_PN_CMD.to_string(),
   ];
@@ -116,6 +123,8 @@ pub fn default_json() -> Value {
       font::NAME_LATIN_CORRECTION : font::DEFAULT_LATIN_CORRECTION,
     }),
     font::NAME_FONT_DATA    : json!(to_font_data_vec(font::make_default_font_vec())),
+    doc::NAME_HEADER_FUN    :doc::DEFAULT_HEADER_FUN,
+    doc::NAME_FOOTER_FUN    :doc::DEFAULT_FOOTER_FUN,
   })
 }
 
