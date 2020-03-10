@@ -8,19 +8,8 @@ pub mod func;
 pub mod page;
 pub mod setting;
 
-pub const NAME_PAGE_WIDTH: &str = page::NAME_PAGE_WIDTH;
-pub const NAME_PAGE_HEIGHT: &str = page::NAME_PAGE_HEIGHT;
-pub const NAME_PAGE_SIZE: &str = page::NAME_PAGE_SIZE;
 
-pub const DEFAULT_PAGE_WIDTH: &str = page::DEFAULT_PAGE_WIDTH;
-pub const DEFAULT_PAGE_HEIGHT: &str = page::DEFAULT_PAGE_HEIGHT;
-pub const DEFAULT_PAGE_SIZE: &str = page::DEFAULT_PAGE_SIZE;
-
-pub fn set_page_size(p: &Option<&str>, w: &str, h: &str) -> String {
-  page::set_page_size(p, w, h)
-}
-
-pub fn body(v: &Value, document_function_name: &str, page_size_str: String) -> String {
+pub fn body(v: &Value, document_function_name: &str) -> String {
   let main_font_size = &v["main-font"]["font-size"]
     .as_str()
     .unwrap_or(setting::DEFAULT_FONT_SIZE);
@@ -45,6 +34,16 @@ pub fn body(v: &Value, document_function_name: &str, page_size_str: String) -> S
   let right_space = &v["right-space"]
     .as_str()
     .unwrap_or(setting::DEFAULT_RIGHT_SPACE);
+
+
+    let page_width = &v[page::NAME_PAGE_WIDTH]
+    .as_str()
+    .unwrap_or(page::DEFAULT_PAGE_WIDTH);
+  let page_height = &v[page::NAME_PAGE_HEIGHT]
+    .as_str()
+    .unwrap_or(page::DEFAULT_PAGE_HEIGHT);
+  let page_size = &v[page::NAME_PAGE_SIZE].as_str();
+  let page_size_str = page::set_page_size(page_size, page_width, page_height);
 
   let font_data = &v["font-data"].as_array();
 
@@ -94,9 +93,9 @@ fn vec_to_str(v: &Vec<String>) -> String {
 pub fn default_json() -> Value {
   json!({
     "font-size": setting::DEFAULT_FONT_SIZE,
-    NAME_PAGE_WIDTH : DEFAULT_PAGE_WIDTH,
-    NAME_PAGE_HEIGHT : DEFAULT_PAGE_HEIGHT,
-    NAME_PAGE_SIZE : DEFAULT_PAGE_SIZE,
+    page::NAME_PAGE_WIDTH : page::DEFAULT_PAGE_WIDTH,
+    page::NAME_PAGE_HEIGHT : page::DEFAULT_PAGE_HEIGHT,
+    page::NAME_PAGE_SIZE : page::DEFAULT_PAGE_SIZE,
     "top-space" : setting::DEFAULT_TOP_SPACE,
     "bottom-space" : setting::DEFAULT_BOTTOM_SPACE,
     "left-space" : setting::DEFAULT_LEFT_SPACE,

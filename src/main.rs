@@ -99,17 +99,9 @@ fn main() {
       let module_name = &config_data[module::NAME_MODULE_NAME]
         .as_str()
         .unwrap_or(module::DEFAULT_MODULE_NAME);
-      let page_width = &config_data[body::NAME_PAGE_WIDTH]
-        .as_str()
-        .unwrap_or(body::DEFAULT_PAGE_WIDTH);
-      let page_height = &config_data[body::NAME_PAGE_HEIGHT]
-        .as_str()
-        .unwrap_or(body::DEFAULT_PAGE_HEIGHT);
-      let page_size = &config_data[body::NAME_PAGE_SIZE].as_str();
-      let page_size_str = body::set_page_size(page_size, page_width, page_height);
       let command_vec = body::make_command_vec();
       let sig = module::make_sig(doc_fun_name, command_vec);
-      let body = body::body(&config_data, doc_fun_name, page_size_str);
+      let body = body::body(&config_data, doc_fun_name);
       let text = format!(
         "{}\nmodule {} : sig\n{}\nend = struct\n{}\nend\n let {} = {}.{}\n",
         header, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
