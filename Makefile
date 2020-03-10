@@ -10,6 +10,7 @@ test: t
 	target/debug/formatcls -o t/test.satyh -c t/t.json
 	satysfi t/t.saty -o t/t.pdf
 	target/debug/formatcls -d t/default.json
+	cargo test
 
 clean:
 	@rm -rf target t

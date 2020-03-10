@@ -1,22 +1,12 @@
-use serde_json::json;
-use serde_json::Value;
+pub const NAME_PAGE_WIDTH: &str = "page-width";
+pub const NAME_PAGE_HEIGHT: &str = "page-height";
+pub const NAME_PAGE_SIZE: &str = "page-size";
 
-pub const DEFAULT_FONT_SIZE: &str = "12pt";
 pub const DEFAULT_PAGE_WIDTH: &str = "210mm";
 pub const DEFAULT_PAGE_HEIGHT: &str = "297mm";
 pub const DEFAULT_PAGE_SIZE: &str = "a4";
-pub const DEFAULT_DOCUMENT_FUNCTION_NAME: &str = "document";
-pub const DEFAULT_MODULE_NAME: &str = "MyCls";
-pub const DEFAULT_TOP_SPACE: &str = "20pt";
-pub const DEFAULT_BOTTOM_SPACE: &str = "20pt";
-pub const DEFAULT_LEFT_SPACE: &str = "20pt";
-pub const DEFAULT_RIGHT_SPACE: &str = "20pt";
 
-pub fn make_let(n: &str, v: &str) -> String {
-  format!("let {} = {}\n", n, v)
-}
-
-pub fn set_page_size(p: &Option<&str>, w: &str, h: &str) -> String {
+pub fn make_page_size_str(p: &Option<&str>, w: &str, h: &str) -> String {
   match p {
     Some("a0") => make_page_size_let("841mm", "1189mm"),
     Some("a1") => make_page_size_let("594mm", "841mm"),
@@ -68,67 +58,49 @@ fn make_page_size_let(w: &str, h: &str) -> String {
   )
 }
 
-pub fn set_main_font(
-  main_font_size: &str,
-  main_font_name_cjk: &str,
-  main_font_ratio_cjk: &str,
-  main_font_correction_cjk: &str,
-  main_font_name_latin: &str,
-  main_font_ratio_latin: &str,
-  main_font_correction_latin: &str,
+pub fn make_let(n: &str, v: &str) -> String {
+  format!("let {} = {}\n", n, v)
+}
+
+pub const NAME_TOP_SPACE: &str = "top-space";
+pub const NAME_BOTTOM_SPACE: &str = "bottom-space";
+pub const NAME_LEFT_SPACE: &str = "left-space";
+pub const NAME_RIGHT_SPACE: &str = "right-space";
+
+pub const DEFAULT_TOP_SPACE: &str = "20pt";
+pub const DEFAULT_BOTTOM_SPACE: &str = "20pt";
+pub const DEFAULT_LEFT_SPACE: &str = "20pt";
+pub const DEFAULT_RIGHT_SPACE: &str = "20pt";
+
+pub fn make_space_str(
+  top_space: &str,
+  bottom_space: &str,
+  left_space: &str,
+  right_space: &str,
 ) -> String {
-  format!(
-    "
-
-let main-font-size = {}
-let main-font-cjk = (```{}```, {}, {})
-let main-font-latin = (```{}```, {}, {})
-
-",
-    main_font_size,
-    main_font_name_cjk,
-    main_font_ratio_cjk,
-    main_font_correction_cjk,
-    main_font_name_latin,
-    main_font_ratio_latin,
-    main_font_correction_latin
-  )
+  let v = vec![
+    make_let("top-space", &top_space),
+    make_let("bottom-space", &bottom_space),
+    make_let("left-space", &left_space),
+    make_let("right-space", &right_space),
+    make_let("text-height", " page-height -' top-space -' bottom-space"),
+    make_let("text-width", " page-width -' left-space -' right-space"),
+  ];
+  let mut main_str = String::new();
+  for s in v.iter() {
+    main_str.push_str(&s)
+  }
+  main_str
 }
 
-pub fn set_set_fn() -> String {
-  "
-
-% フォント変更用関数
-let set-cjk-font font-name ctx =
-  ctx |> set-font HanIdeographic font-name
-      |> set-font Kana font-name
-
-
-let set-latin-font font-name ctx =
-  ctx |> set-font Latin font-name
-
-  "
-  .to_string()
-}
-
-pub fn set_initial_context() -> String {
-  "
-% 基本となるctxの設定
-let ctx-get-initial-context l-width =
-  get-initial-context l-width (command \\math)
-    |> set-font-size main-font-size
-    |> set-dominant-wide-script Kana
-    |> set-language Kana Japanese
-    |> set-language HanIdeographic Japanese
-    |> set-cjk-font main-font-cjk
-    |> set-dominant-narrow-script Latin
-    |> set-language Latin English
-    |> set-latin-font main-font-latin
-    |> set-hyphen-penalty 100
-    |> set-math-font `lmodern`
-    |> set-manual-rising 0pt % 文字の上下の補正値
-    |> set-text-color Color.black
-
-"
-  .to_string()
+#[test]
+fn check_set_page_size() {
+  assert_eq!(
+    make_page_size_str(&Some("a4"), "240mm", "100mm"),
+    "let page-width = 210mm\nlet page-height = 297mm\n\n".to_string()
+  );
+  assert_eq!(
+    make_page_size_str(&None, "240mm", "100mm"),
+    "let page-width = 240mm\nlet page-height = 100mm\n\n".to_string()
+  );
 }
