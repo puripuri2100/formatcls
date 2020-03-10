@@ -82,10 +82,10 @@ fn main() {
     (Some(c), Some(o)) => {
       let config_data = parse(c);
       let json_null_vec = vec![json!(null)];
-      let require_list = config_data["require-package"]
+      let require_list = config_data[header::NAME_REQUIRE_PACKAGE]
         .as_array()
         .unwrap_or(&json_null_vec);
-      let import_list = config_data["import-package"]
+      let import_list = config_data[header::NAME_IMPORT_PACKAGE]
         .as_array()
         .unwrap_or(&json_null_vec);
       let header = header::package(

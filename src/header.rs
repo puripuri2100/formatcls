@@ -1,13 +1,16 @@
 use serde_json::json;
 use serde_json::Value;
 
+pub const NAME_REQUIRE_PACKAGE: &str = "require-package";
+pub const NAME_IMPORT_PACKAGE: &str = "import-package";
+
 pub const DEFAULT_REQUIRE_PACKAGE_VEC_STR: Option<&str> = None;
 pub const DEFAULT_IMPORT_PACKAGE_VEC_STR: Option<&str> = None;
 
 pub fn default_json() -> Value {
   json!({
-    "require-package":[],
-    "import-package":[]
+    NAME_REQUIRE_PACKAGE:[],
+    NAME_IMPORT_PACKAGE:[]
   })
 }
 
