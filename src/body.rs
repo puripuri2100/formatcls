@@ -75,6 +75,8 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     func::make_register_cross_reference_fun(),
     func::make_get_cross_reference_fun(),
     func::make_register_location_frame_fun(),
+    command::DEF_REF_CMD.to_string(),
+    command::DEF_REF_PAGE_CMD.to_string(),
     func::make_header(),
     func::make_footer(),
     doc::make_document_function(&document_function_name),
@@ -133,6 +135,8 @@ pub fn to_font_data_vec(vec: Vec<(&str, &str, &str, &str)>) -> Vec<Value> {
 
 pub fn make_command_vec() -> Vec<String> {
   let def_module_vec = vec![
+    command::DIRECT_REF_CMD.to_string(),
+    command::DIRECT_REF_PAGE_CMD.to_string(),
     command::DIRECT_P_CMD.to_string(),
     command::DIRECT_PN_CMD.to_string(),
   ];
