@@ -23,5 +23,8 @@
     }
   ],
   "doc-fun-name" : "doc",
-  "config-data":[]
+  "import-package":[],
+  "require-package":[],
+  "header-fun":"empty",
+  "footer-fun":"empty"
 }
