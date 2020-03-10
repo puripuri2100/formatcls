@@ -1,7 +1,11 @@
+use serde_json::json;
 use serde_json::Value;
 
-pub fn default_vec() -> Vec<(String, String)> {
-  vec![]
+pub fn default_json() -> Value {
+  json!({
+    "require-package":[],
+    "import-package":[]
+  })
 }
 
 pub fn package(default: Vec<&str>, require: &Value, import: &Value) -> String {

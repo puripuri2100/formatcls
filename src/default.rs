@@ -1,22 +1,36 @@
+use json_patch::merge;
 use serde_json::json;
 use serde_json::Value;
 
-pub fn make_default_json(
-  header: Vec<(String, String)>,
-  module: Vec<(String, String)>,
-  body: Vec<(String, String)>,
-) -> Value {
-  let mut main_str = String::new();
-  for (tag, v) in header.iter() {
-    main_str.push_str(&format!("\"{}\":{}", tag, v))
-  }
-  for (tag, v) in module.iter() {
-    main_str.push_str(&format!("\"{}\":{}", tag, v))
-  }
-  for (tag, v) in body.iter() {
-    main_str.push_str(&format!("\"{}\":{}", tag, v))
-  }
-  let json_date = format!("{}{}{}", "{", main_str, "}");
-  let v: Value = serde_json::from_str(&json_date).unwrap_or(json!(null));
-  v
+pub fn merge_default_json(h: Value, m: Value, b: Value) -> Value {
+  let mut main = json!(null);
+  merge(&mut main, &h);
+  merge(&mut main, &m);
+  merge(&mut main, &b);
+  main
+}
+
+#[test]
+fn check_make_json() {
+  let h = json!({"u":200});
+  let m = json!({"bool":true});
+  let b = json!({
+    "json": {
+      "str_array": [
+          "hoge",
+          "fuga"
+      ]
+    }
+  });
+  let r = json!({
+    "u":200,
+    "bool":true,
+    "json": {
+      "str_array": [
+          "hoge",
+          "fuga"
+      ]
+    }
+  });
+  assert_eq!(merge_default_json(h, m, b), r);
 }

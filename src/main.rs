@@ -89,16 +89,18 @@ fn main() {
     (_, _) => (),
   };
 
+  let default_json =
+    default::merge_default_json(
+      header::default_json(),
+      module::default_json(),
+      body::default_json(),
+    );
+
   let _ = match default_name {
     None => {}
     Some(s) => write_file(
       s,
-      default::make_default_json(
-        header::default_vec(),
-        module::default_vec(),
-        body::default_vec(),
-      )
-      .to_string(),
+      default_json.to_string(),
     ),
   };
 }

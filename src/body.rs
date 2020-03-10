@@ -91,8 +91,8 @@ pub fn body(v: &Value) -> (String, String) {
   (module_str, value_str)
 }
 
-pub fn default_json_setting() -> String {
-  let value = json!({
+pub fn default_json() -> Value {
+  json!({
     "module" : setting::DEFAULT_MODULE_NAME,
     "font-size": setting::DEFAULT_FONT_SIZE,
     "page-width" : setting::DEFAULT_PAGE_WIDTH,
@@ -103,9 +103,7 @@ pub fn default_json_setting() -> String {
     "bottom-space" : setting::DEFAULT_BOTTOM_SPACE,
     "left-space" : setting::DEFAULT_LEFT_SPACE,
     "right-space" : setting::DEFAULT_RIGHT_SPACE,
-  });
-
-  value.to_string()
+  })
 }
 
 fn vec_to_str(v: &Vec<String>) -> String {
@@ -116,7 +114,4 @@ fn vec_to_str(v: &Vec<String>) -> String {
     s.push_str(&st)
   }
   s
-}
-pub fn default_vec() -> Vec<(String, String)> {
-  vec![]
 }
