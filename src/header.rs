@@ -1,6 +1,9 @@
 use serde_json::json;
 use serde_json::Value;
 
+pub const DEFAULT_REQUIRE_PACKAGE_VEC_STR: Option<&str> = None;
+pub const DEFAULT_IMPORT_PACKAGE_VEC_STR: Option<&str> = None;
+
 pub fn default_json() -> Value {
   json!({
     "require-package":[],
@@ -36,4 +39,3 @@ fn make_import(v: Vec<String>) -> String {
   }
   st
 }
-

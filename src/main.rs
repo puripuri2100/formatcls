@@ -84,16 +84,14 @@ fn main() {
       let json_null_vec = vec![json!(null)];
       let require_list = config_data["require-package"]
         .as_array()
-        .unwrap_or(&json_null_vec)
-        .clone();
+        .unwrap_or(&json_null_vec);
       let import_list = config_data["import-package"]
         .as_array()
-        .unwrap_or(&json_null_vec)
-        .clone();
+        .unwrap_or(&json_null_vec);
       let header = header::package(
         package_data,
-        json_vec_to_str_vec(&require_list, None),
-        json_vec_to_str_vec(&import_list, None),
+        json_vec_to_str_vec(require_list, header::DEFAULT_REQUIRE_PACKAGE_VEC_STR),
+        json_vec_to_str_vec(import_list, header::DEFAULT_IMPORT_PACKAGE_VEC_STR),
       );
       let module = body::module_name(&config_data);
       let (sig, body) = body::body(&config_data);
