@@ -2,7 +2,6 @@ pub const DEFAULT_FONT_SIZE: &str = "12pt";
 pub const DEFAULT_PAGE_WIDTH: &str = "210mm";
 pub const DEFAULT_PAGE_HEIGHT: &str = "297mm";
 pub const DEFAULT_PAGE_SIZE: &str = "a4";
-pub const DEFAULT_DOCUMENT_FUNCTION_NAME: &str = "document";
 pub const DEFAULT_TOP_SPACE: &str = "20pt";
 pub const DEFAULT_BOTTOM_SPACE: &str = "20pt";
 pub const DEFAULT_LEFT_SPACE: &str = "20pt";

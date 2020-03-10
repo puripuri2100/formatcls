@@ -7,7 +7,7 @@ pub mod font;
 pub mod func;
 pub mod setting;
 
-pub fn body(v: &Value) -> String {
+pub fn body(v: &Value,document_function_name:&str) -> String {
   let page_width = &v["page-width"]
     .as_str()
     .unwrap_or(setting::DEFAULT_PAGE_WIDTH);
@@ -43,9 +43,6 @@ pub fn body(v: &Value) -> String {
 
   let font_data = &v["font-data"].as_array();
 
-  let document_function_name = &v["doc-fun-name"]
-    .as_str()
-    .unwrap_or(setting::DEFAULT_DOCUMENT_FUNCTION_NAME);
   let document_config_data = &v["config-data"].as_array();
 
   let def_value_vec = vec![

@@ -101,7 +101,7 @@ fn main() {
         .unwrap_or(module::DEFAULT_MODULE_NAME);
       let command_vec = body::make_command_vec();
       let sig = module::make_sig(doc_fun_name, command_vec);
-      let body = body::body(&config_data);
+      let body = body::body(&config_data,doc_fun_name);
       let text = format!(
         "{}\nmodule {} : sig\n{}\nend = struct\n{}\nend\n let {} = {}.{}\n",
         header, module_name, sig, body, doc_fun_name, module_name, doc_fun_name
