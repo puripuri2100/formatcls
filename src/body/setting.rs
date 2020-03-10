@@ -1,6 +1,3 @@
-use serde_json::json;
-use serde_json::Value;
-
 pub const DEFAULT_FONT_SIZE: &str = "12pt";
 pub const DEFAULT_PAGE_WIDTH: &str = "210mm";
 pub const DEFAULT_PAGE_HEIGHT: &str = "297mm";
@@ -131,4 +128,16 @@ let ctx-get-initial-context l-width =
 
 "
   .to_string()
+}
+
+#[test]
+fn check_set_page_size() {
+  assert_eq!(
+    set_page_size(&Some("a4"), "240mm", "100mm"),
+    "let page-width = 210mm\nlet page-height = 297mm\n\n".to_string()
+  );
+  assert_eq!(
+    set_page_size(&None, "240mm", "100mm"),
+    "let page-width = 240mm\nlet page-height = 100mm\n\n".to_string()
+  );
 }
