@@ -23,7 +23,7 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
   let main_font_name_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_NAME]
     .as_str()
     .unwrap_or(font::DEFAULT_LATIN_NAME);
-  let main_font_ratio_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
+  let main_font_ratio_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_RATIO]
     .as_str()
     .unwrap_or(font::DEFAULT_LATIN_CORRECTION);
   let main_font_correction_latin = &v[font::NAME_MAIN_FONT][font::NAME_LATIN_CORRECTION]
