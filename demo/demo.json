@@ -7,7 +7,7 @@
   "bottom-space" : "40pt",
   "main-font" : {
     "size":"12pt",
-    "cjk-name":"Junicode",
+    "cjk-name":"ipaexm",
     "cjk-ratio":"0.88",
     "cjk-correction":"0.",
     "latin-name":"lmsans",
@@ -26,5 +26,8 @@
   "import-package":[],
   "require-package":[],
   "header-fun":"empty",
-  "footer-fun":"empty"
+  "footer-fun":"empty",
+  "sec-depth":4,
+  "sec-name-list" : ["chapter","section", "subsection", "subsubsection"],
+  "toc-depth":2
 }

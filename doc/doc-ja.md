@@ -94,7 +94,7 @@ formatcls -c <json file> -o <output file>
 - hooter-fun : フッターを作成する関数を指定してください。`header-fun`と大体共通です。
 - sec-depth : 章や節の関数をいくつまで生成するかです。
 - sec-name-list : 章や節のコマンド名を与えます。sec-depthでの値よりもリストの長さが短いと、コマンド名は自動生成になります。
-- sec-fun : 章や節のタイトルなどを作る関数です。デフォルトでは`make-sec-bb`ですが、自分で指定することもできます。型は`ctx:context -> label:string -> title:inline-text -> outline-title-opt:inline-text option -> main:block-text -> count-lst:int list -> i:int -> block-boxes`です。
+- sec-fun : 章や節のタイトルなどを作る関数です。デフォルトでは`make-sec-bb`ですが、自分で指定することもできます（その場合、outlineは使えません）。型は`ctx:context -> label:string -> title:inline-text -> outline-title-opt:inline-text option -> main:block-text -> count-lst:int list -> i:int -> block-boxes`です。
 - toc-depth : 目次の表示深さです。sec-depthより大きいと、自動的にsec-depthと同じ大きさになります。
 - toc-fun : sec-funと同じような感じです。デフォルトは`make-toc-bb`で、型は`ctx:context -> text-width:length -> label:string -> title:inline-text -> count-lst:int list -> i:int -> inline-boxes`です。
 

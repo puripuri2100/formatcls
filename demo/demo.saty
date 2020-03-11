@@ -4,5 +4,11 @@ Demo.doc (|
   title = {タイトル};
   author = {puripuri2100};
 |) '<
+  +chapter?:(`cha1`){これは章です}<
+    +section?:(`sec1`){これは節です}<
+      +p{“\ref(`cha1`);章”のように参照できます。}
+      +p{目次もありますね}
+    >
+  >
   +p{text}
 >
