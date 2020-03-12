@@ -7,6 +7,7 @@ pub mod font;
 pub mod func;
 pub mod page;
 pub mod sec;
+pub mod title;
 pub mod toc;
 
 pub fn body(v: &Value, document_function_name: &str) -> String {
@@ -73,6 +74,9 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     .as_str()
     .unwrap_or(doc::DEFAULT_FOOTER_FUN);
 
+  let title_fun = &v[title::NAME_TITLE_FUN]
+    .as_str()
+    .unwrap_or(title::DEFAULT_TITLE_FUN);
   let toc_depth = &v[toc::NAME_TOC_DEPTH]
     .as_u64()
     .unwrap_or(toc::DEFAULT_TOC_DEPTH);
@@ -92,6 +96,7 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     .as_str()
     .unwrap_or(sec::DEFAULT_SEC_FUN);
 
+  let title_str = title::make_title_str(title_fun);
   let toc_str = if toc_depth > sec_depth {
     toc::make_toc_str(sec_depth, toc_fun)
   } else {
@@ -113,11 +118,13 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     func::make_toc_and_outline_lst(),
     command::DEF_REF_CMD.to_string(),
     command::DEF_REF_PAGE_CMD.to_string(),
+    title::title_bb_fun(),
     toc_str,
     func::make_header_footer_fun(),
     sec_str,
     doc::make_document_function(
       &document_function_name,
+      title_str,
       toc::make_toc_fun_str(),
       header_fun,
       footer_fun,
@@ -165,6 +172,7 @@ pub fn default_json() -> Value {
     sec::NAME_SEC_DEPTH     : sec::DEFAULT_SEC_DEPTH,
     sec::NAME_SEC_FUN_NAME  : sec::default_sec_fun_name(),
     sec::NAME_SEC_FUN       : sec::DEFAULT_SEC_FUN,
+    title::NAME_TITLE_FUN   : title::DEFAULT_TITLE_FUN,
   })
 }
 

@@ -1,6 +1,7 @@
 .PHONY: build install test clean demo
 
 build: src
+	cargo fmt
 	cargo build
 	find . -name "*.rs" -print0 | wc --files0-from=-
 

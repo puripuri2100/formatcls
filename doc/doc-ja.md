@@ -57,7 +57,16 @@ formatcls -c <json file> -o <output file>
 - `+p : [inline-text] block-cmd` : 段落用
 - `+pn : [inline-text] block-cmd` : 段落用
 
-※標準のクラスファイルではドキュメント関数はトップレベルで使えますが、このソフトウェアが生成するクラスファイルではそのための特別な処理はしていません。そのため、使う時は`Module.document-function`のようにモジュール名を付ける必要があります。
+ドキュメント関数は
+```
+val document : 'a -> block-text -> document
+  constraint 'a :: (|
+    title : inline-text;
+    author : inline-text;
+    other : 'b;
+  |)
+```
+という型を持っています。`other`の部分は`title-fun`で指定したタイトル作成関数に依存します。デフォルトでは`'a`です。
 
 # 設定ファイルに書くもの
 
@@ -104,6 +113,7 @@ formatcls -c <json file> -o <output file>
 - sec-fun : 章や節のタイトルなどを作る関数です。デフォルトでは`make-sec-bb`ですが、自分で指定することもできます）。型は`ctx:context -> label:string -> count-lst:int list -> i:int -> title:inline-text -> outline-lst:((int, string, string, bool) list) ref -> outline-title-opt:inline-text option -> main:block-text -> block-boxes`です。
 - toc-depth : 目次の表示深さです。sec-depthより大きいと、自動的にsec-depthと同じ大きさになります。
 - toc-fun : sec-funと同じような感じです。デフォルトは`make-toc-bb`で、型は`ctx:context -> text-width:length -> label:string -> count-lst:int list -> i:int -> title:inline-text -> inline-boxes`です。
+- title-fun : sec-funと同じような感じです。デフォルトは`make-title-bb`で、型は`ctx:context -> title:inline-text -> author:inline-text -> other:'a -> block-boxes`です。otherの中は何でも含めることができますが、ドキュメント関数に必要なレコードの`other`の部分に必要になります。
 
 デフォルトの設定が知りたい場合は`-d`オプションをつけて
 ```sh

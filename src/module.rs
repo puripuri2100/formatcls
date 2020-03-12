@@ -20,6 +20,7 @@ pub fn make_sig(doc_name: &str, command_vec: Vec<String>) -> String {
   constraint 'a :: (|
     title : inline-text;
     author : inline-text;
+    other : 'b;
   |)\n",
     doc_name
   );
