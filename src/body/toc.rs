@@ -63,6 +63,7 @@ let make-toc-bb ctx text-width label count-lst i title =
           (get-ib-width ib-page) -'
           13pt
         ) ++ inline-skip 5pt ++ inline-fil ++ ib-page
+      |> ib-link-to-location-frame label
     | 2 ->
       inline-skip ((main-font-size *' 1.2) *' 1.0) ++
       (count-lst
@@ -74,6 +75,7 @@ let make-toc-bb ctx text-width label count-lst i title =
       read-inline ctx-2 {{#title;}} ++
       inline-fil ++
       read-inline ctx-2 {{#it-page;}}
+      |> ib-link-to-location-frame label
     | _ ->
       inline-skip ((main-font-size *' 1.2) *' 2.0) ++
       (count-lst
@@ -84,7 +86,8 @@ let make-toc-bb ctx text-width label count-lst i title =
       ) ++
       read-inline ctx {{#title;}} ++
       inline-fil ++
-      read-inline ctx {{#it-page;}}\n"
+      read-inline ctx {{#it-page;}}
+      |> ib-link-to-location-frame label\n"
   )
 }
 

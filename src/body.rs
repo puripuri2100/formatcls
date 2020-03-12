@@ -7,6 +7,7 @@ pub mod font;
 pub mod func;
 pub mod page;
 pub mod sec;
+pub mod title;
 pub mod toc;
 
 pub fn body(v: &Value, document_function_name: &str) -> String {
