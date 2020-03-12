@@ -37,7 +37,7 @@ let make-toc-bb ctx text-width label title lst n =
   let ctx-1 =
     ctx
     |> set-cjk-font font-gothic
-    |> set-latin-font font-bold
+    |> set-latin-font font-sans
     |> set-font-size (main-font-size *' 1.2)
   in
   let ctx-2 =
@@ -75,7 +75,7 @@ let make-toc-bb ctx text-width label title lst n =
       inline-fil ++
       read-inline ctx-2 {{#it-page;}}
     | _ ->
-      inline-skip 8pt ++
+      inline-skip ((main-font-size *' 1.2) *' 2.0) ++
       (lst
         |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
         |> List.fold-left (^) ` `
