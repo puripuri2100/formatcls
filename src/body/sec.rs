@@ -32,13 +32,15 @@ fn make_sec_num_ref(sec_depth: &u64) -> String {
   main_str
 }
 
-fn add_toc_lst (i:usize, toc_depth_64:&u64) -> String {
+fn add_toc_lst(i: usize, toc_depth_64: &u64) -> String {
   let toc_depth = *toc_depth_64 as usize;
   if i > toc_depth {
     format!("()")
-  }
-  else{
-  format!("toc-lst-ref <- (Sec{}(label, title, lst)) :: !toc-lst-ref",i)
+  } else {
+    format!(
+      "toc-lst-ref <- (Sec{}(label, title, lst)) :: !toc-lst-ref",
+      i
+    )
   }
 }
 
@@ -114,7 +116,7 @@ let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
 fn make_sec_cmd(sec_fun_name: &Vec<String>, sec_fun: &str, depth: &u64, toc_depth: &u64) -> String {
   let mut main_str = String::new();
   let len = sec_fun_name.len();
-  for i in 1..(len+1) {
+  for i in 1..(len + 1) {
     let s = format!(
       "
 let-block ctx +{} ?:labelopt ?:outline-title-opt title inner =
@@ -138,7 +140,7 @@ let-block ctx +{} ?:labelopt ?:outline-title-opt title inner =
       sec_fun_name[(i - 1)],
       make_cout(i, depth),
       make_num_lst(i),
-      add_toc_lst(i,toc_depth),
+      add_toc_lst(i, toc_depth),
       sec_fun,
       i
     );

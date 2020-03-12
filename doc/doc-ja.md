@@ -46,9 +46,16 @@ formatcls -c <json file> -o <output file>
 ## 提供コマンド・関数
 
 今のところドキュメント型を返すための関数と、以下のコマンドになります。
-
-- `+p : [inline-text] block-cmd` 段落用
-- `+pn : [inline-text] block-cmd` 段落用
+- `val u-register-cross-reference-num : string -> string -> unit` : 数の登録用（`f key title`）と使います。
+- `val ib-register-cross-reference-page : string -> string -> inline-boxes` : ページの登録用（`f key title`）と使って得たinline-boxesを必要な箇所にくっつけます。
+- `val s-get-cross-reference-num : string -> string` : 数の取得用
+- `val s-get-cross-reference-page : string -> string` : 数の取得用
+- `val ib-register-location-frame : string -> inline-boxes -> inline-boxes` :リンクを貼ります 
+- `val ib-link-to-location-frame : string -> inline-boxes -> inline-boxes` : リンクに飛びます
+- `direct \ref : [string] inline-cmd` : 相互参照
+- `direct \ref-page : [string] inline-cmd` : 相互参照（ページ）
+- `+p : [inline-text] block-cmd` : 段落用
+- `+pn : [inline-text] block-cmd` : 段落用
 
 ※標準のクラスファイルではドキュメント関数はトップレベルで使えますが、このソフトウェアが生成するクラスファイルではそのための特別な処理はしていません。そのため、使う時は`Module.document-function`のようにモジュール名を付ける必要があります。
 

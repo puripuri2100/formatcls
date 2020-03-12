@@ -184,6 +184,9 @@ pub fn to_font_data_vec(vec: Vec<(&str, &str, &str, &str)>) -> Vec<Value> {
 
 pub fn make_command_vec(v: &Value) -> Vec<String> {
   let mut def_module_vec = vec![
+    func::VAL_REGISTER_CROSS_REFERENCE_FUN.to_string(),
+    func::VAL_GET_CROSS_REFERENCE_FUN.to_string(),
+    func::VAL_REGISTER_LOCATION_FRAME_FUN.to_string(),
     command::DIRECT_REF_CMD.to_string(),
     command::DIRECT_REF_PAGE_CMD.to_string(),
     command::DIRECT_P_CMD.to_string(),

@@ -36,6 +36,10 @@ pub fn make_register_cross_reference_fun() -> String {
 ".to_string()
 }
 
+pub const VAL_REGISTER_CROSS_REFERENCE_FUN: &str =
+  "val u-register-cross-reference-num : string -> string -> unit
+val ib-register-cross-reference-page : string -> string -> inline-boxes";
+
 pub fn make_get_cross_reference_fun() -> String {
   "
 
@@ -54,6 +58,9 @@ pub fn make_get_cross_reference_fun() -> String {
 "
   .to_string()
 }
+
+pub const VAL_GET_CROSS_REFERENCE_FUN: &str = "val s-get-cross-reference-num : string -> string
+val s-get-cross-reference-page : string -> string";
 
 pub fn make_register_location_frame_fun() -> String {
   "
@@ -74,6 +81,10 @@ pub fn make_register_location_frame_fun() -> String {
 "
   .to_string()
 }
+
+pub const VAL_REGISTER_LOCATION_FRAME_FUN: &str =
+  "val ib-register-location-frame : string -> inline-boxes -> inline-boxes
+val ib-link-to-location-frame : string -> inline-boxes -> inline-boxes";
 
 pub fn make_toc_and_outline_lst() -> String {
   "
