@@ -114,6 +114,8 @@ val document : 'a -> block-text -> document
 - toc-depth : 目次の表示深さです。sec-depthより大きいと、自動的にsec-depthと同じ大きさになります。
 - toc-fun : sec-funと同じような感じです。デフォルトは`make-toc-bb`で、型は`ctx:context -> text-width:length -> label:string -> count-lst:int list -> i:int -> title:inline-text -> inline-boxes`です。
 - title-fun : sec-funと同じような感じです。デフォルトは`make-title-bb`で、型は`ctx:context -> title:inline-text -> author:inline-text -> other:'a -> block-boxes`です。otherの中は何でも含めることができますが、ドキュメント関数に必要なレコードの`other`の部分に必要になります。
+- titlepage : タイトルを独立のページにするかどうかの真偽値です。
+- tocpage : 目次を独立のページにするかどうかの真偽値です。
 
 デフォルトの設定が知りたい場合は`-d`オプションをつけて
 ```sh

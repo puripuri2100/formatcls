@@ -1,3 +1,9 @@
+pub const NAME_IF_TITLE_PAGE: &str = "titlepage";
+pub const NAME_IF_TOC_PAGE: &str = "tocpage";
+
+pub const DEFAULT_IF_TITLE_PAGE: bool = false;
+pub const DEFAULT_IF_TOC_PAGE: bool = false;
+
 const CTX_DOC: &str = "
   % ctx設定
   let ctx-doc = ctx-get-initial-context text-width in\n
@@ -43,10 +49,23 @@ pub fn page_parts_f(header_fun: &str, footer_fun: &str) -> String {
   )
 }
 
-const LET_DOC_MAIN: &str = "
+fn if_clear_page(b: bool) -> &'static str {
+  if b {
+    "clear-page"
+  } else {
+    "block-nil"
+  }
+}
+
+fn let_doc_main(if_title_page: &bool, if_toc_page: &bool) -> String {
+  format!("
   % メイン
-  let doc-main = page-break page pagecontf pagepartsf (bb-title +++ bb-toc-main +++ clear-page +++ bb-main) in
-";
+  let doc-main = page-break page pagecontf pagepartsf (bb-title +++ {} +++ bb-toc-main +++ {} +++ bb-main) in
+",
+  if_clear_page(*if_title_page),
+  if_clear_page(*if_toc_page)
+)
+}
 
 const OUTLINE: &str = "  let () = register-outline (List.reverse !outline-lst-ref) in\n";
 
@@ -64,6 +83,8 @@ pub fn make_document_function(
   toc_fun: String,
   header_fun: &str,
   footer_fun: &str,
+  if_title_page: &bool,
+  if_toc_page: &bool,
 ) -> String {
   let v = vec![
     CTX_DOC.to_string(),
@@ -73,7 +94,7 @@ pub fn make_document_function(
     PAGE.to_string(),
     PAGE_CONT_F.to_string(),
     page_parts_f(header_fun, footer_fun),
-    LET_DOC_MAIN.to_string(),
+    let_doc_main(if_title_page, if_toc_page),
     OUTLINE.to_string(),
     DOC.to_string(),
   ];
