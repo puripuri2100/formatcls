@@ -64,9 +64,9 @@ fn make_num_lst(n: usize) -> String {
 fn make_sec_bb_fun() -> String {
   format!(
     "
-let make-sec-bb ctx label title outline-title-opt inner lst n outline-lst =
+let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
   let sec-ctx =
-    match n with
+    match i with
     | 1 -> 
       ctx
       |> set-cjk-font font-gothic
@@ -84,7 +84,7 @@ let make-sec-bb ctx label title outline-title-opt inner lst n outline-lst =
       |> set-font-size (main-font-size *' 1.2)
   in
   let s-num =
-    lst
+    count-lst
     |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
     |> List.fold-left (^) ` `
   in
@@ -95,17 +95,17 @@ let make-sec-bb ctx label title outline-title-opt inner lst n outline-lst =
   let ib-title-link = ib-register-cross-reference-page label s-title in
   let () = u-register-cross-reference-num label s-num in
   let () =
-    match n with
-    | 1 -> (outline-lst <- (n, s-num ^ s-title, label, true) :: !outline-lst)
-    | 2 -> (outline-lst <- (n, s-num ^ s-title, label, true) :: !outline-lst)
-    | _ -> (outline-lst <- (n, s-num ^ s-title, label, false) :: !outline-lst)
+    match i with
+    | 1 -> (outline-lst <- (i, s-num ^ s-title, label, true) :: !outline-lst)
+    | 2 -> (outline-lst <- (i, s-num ^ s-title, label, true) :: !outline-lst)
+    | _ -> (outline-lst <- (i, s-num ^ s-title, label, false) :: !outline-lst)
   in
   let ib-num = read-inline sec-ctx (embed-string s-num) in
 
   let bb-title =
     line-break true false sec-ctx (ib-num ++ ib-title ++ ib-title-link)
   in
-  let bb-inner = read-block ctx inner in
+  let bb-inner = read-block ctx main in
     bb-title +++ bb-inner
   \n"
   )
@@ -134,7 +134,7 @@ let-block ctx +{} ?:labelopt ?:outline-title-opt title inner =
     | Some(label) -> label
   in
   let () = {} in
-    {} ctx label title outline-title-opt inner lst {} outline-lst-ref\n\n",
+    {} ctx label lst {} title outline-lst-ref outline-title-opt inner\n\n",
       sec_fun_name[(i - 1)],
       make_cout(i, depth),
       make_num_lst(i),

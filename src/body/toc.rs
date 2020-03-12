@@ -32,7 +32,7 @@ let get-ib-width ib =
   get-natural-metrics ib
   |> (fun (w,_,_) -> w)
 
-let make-toc-bb ctx text-width label title lst n =
+let make-toc-bb ctx text-width label count-lst i title =
   let it-page = embed-string (s-get-cross-reference-page label) in
   let ctx-1 =
     ctx
@@ -44,10 +44,10 @@ let make-toc-bb ctx text-width label title lst n =
     ctx
     |> set-font-size (main-font-size *' 1.1)
   in
-    match n with
+    match i with
     | 1 ->
       let ib-num =
-        lst
+        count-lst
         |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
         |> List.fold-left (^) ` `
         |> embed-string
@@ -65,7 +65,7 @@ let make-toc-bb ctx text-width label title lst n =
         ) ++ inline-skip 5pt ++ inline-fil ++ ib-page
     | 2 ->
       inline-skip ((main-font-size *' 1.2) *' 1.0) ++
-      (lst
+      (count-lst
         |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
         |> List.fold-left (^) ` `
         |> embed-string
@@ -76,7 +76,7 @@ let make-toc-bb ctx text-width label title lst n =
       read-inline ctx-2 {{#it-page;}}
     | _ ->
       inline-skip ((main-font-size *' 1.2) *' 2.0) ++
-      (lst
+      (count-lst
         |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
         |> List.fold-left (^) ` `
         |> embed-string
@@ -92,7 +92,7 @@ fn make_toc_fun(depth: u64, fun_name: &str) -> String {
   let mut main_str = "let make-toc ctx text-width t =\n  match t with\n".to_string();
   for i in 1..(depth + 1) {
     let s = format!(
-      "    | Sec{} (label,title,lst) -> {} ctx text-width label title lst {}\n",
+      "    | Sec{} (label,title,lst) -> {} ctx text-width label lst {} title\n",
       i, fun_name, i
     );
     main_str.push_str(&s)
