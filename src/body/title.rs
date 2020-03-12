@@ -20,9 +20,9 @@ let {} ctx title author other =
   in
   let title-ib = read-inline title-ctx title in
   let author-ib = read-inline author-ctx author in
-  let title-bb = line-break true false title-ctx title-ib in
-  let author-bb = line-break false true author-ctx author-ib in
-  let main-bb = title-bb +++ author-bb in
+  let title-bb = line-break true false title-ctx (inline-fil ++ title-ib ++ inline-fil) in
+  let author-bb = line-break false true author-ctx (inline-fil ++ author-ib ++ inline-fil) in
+  let main-bb = block-skip 10pt +++ title-bb +++ author-bb +++ block-skip 10pt in
     main-bb\n",
     DEFAULT_TITLE_FUN
   )
