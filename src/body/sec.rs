@@ -119,20 +119,24 @@ fn make_sec_cmd(sec_fun_name: &Vec<String>, sec_fun: &str, depth: &u64, toc_dept
       "
 let-block ctx +{} ?:labelopt ?:outline-title-opt title inner =
   {}
-  let label =
-    match labelopt with
-    | None        -> `sec{}:` ^ (arabic !sec{}-count)
-    | Some(label) -> label
-  in
   let lst =
     {}
   in
+  let join i s1 s2 =
+    if i <= 0 then
+      s2
+    else
+      s1 ^ `-` ^ s2
+  in
+  let label =
+    match labelopt with
+    | None        -> lst |> List.map arabic |> List.fold-lefti join ` `
+    | Some(label) -> label
+  in
   let () = {} in
-    {} ctx label title outline-title-opt inner lst {} outline-lst-ref\n",
+    {} ctx label title outline-title-opt inner lst {} outline-lst-ref\n\n",
       sec_fun_name[(i - 1)],
       make_cout(i, depth),
-      i,
-      i,
       make_num_lst(i),
       add_toc_lst(i,toc_depth),
       sec_fun,
