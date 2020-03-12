@@ -3,6 +3,7 @@
 Demo.doc (|
   title = {タイトル};
   author = {puripuri2100};
+  other = ` `;
 |) '<
   +chapter?:(`cha1`){これは章です}<
     +section?:(`sec1`){これは節です}<

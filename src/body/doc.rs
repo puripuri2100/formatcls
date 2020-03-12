@@ -45,7 +45,7 @@ pub fn page_parts_f(header_fun: &str, footer_fun: &str) -> String {
 
 const LET_DOC_MAIN: &str = "
   % メイン
-  let doc-main = page-break page pagecontf pagepartsf (bb-toc-main +++ clear-page +++ bb-main) in
+  let doc-main = page-break page pagecontf pagepartsf (bb-title +++ bb-toc-main +++ clear-page +++ bb-main) in
 ";
 
 const OUTLINE: &str = "  let () = register-outline (List.reverse !outline-lst-ref) in\n";
@@ -60,6 +60,7 @@ pub const DEFAULT_FOOTER_FUN: &str = "make-footer";
 
 pub fn make_document_function(
   function_name: &str,
+  title_str: String,
   toc_fun: String,
   header_fun: &str,
   footer_fun: &str,
@@ -67,6 +68,7 @@ pub fn make_document_function(
   let v = vec![
     CTX_DOC.to_string(),
     BB_MAIN.to_string(),
+    title_str,
     toc_fun,
     PAGE.to_string(),
     PAGE_CONT_F.to_string(),

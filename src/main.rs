@@ -68,15 +68,7 @@ fn main() {
     print!("Output for default: {}\n", default);
   }
 
-  let package_data = vec![
-    "annot".to_string(),
-    "option".to_string(),
-    "list".to_string(),
-    "math".to_string(),
-    "gr".to_string(),
-    "color".to_string(),
-    "vdecoset".to_string(),
-  ];
+  let package_data = vec!["annot".to_string(), "list".to_string(), "math".to_string()];
 
   let _ = match (&mut config_name, &mut output_name) {
     (Some(c), Some(o)) => {
