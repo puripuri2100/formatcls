@@ -64,7 +64,7 @@ fn make_num_lst(n: usize) -> String {
 fn make_sec_bb_fun() -> String {
   format!(
     "
-let make-sec-bb ctx label title outline-title-opt inner lst n =
+let make-sec-bb ctx label title outline-title-opt inner lst n outline-lst =
   let sec-ctx =
     match n with
     | 1 -> 
@@ -96,9 +96,9 @@ let make-sec-bb ctx label title outline-title-opt inner lst n =
   let () = u-register-cross-reference-num label s-num in
   let () =
     match n with
-    | 1 -> (outline-lst-ref <- (n, s-num ^ s-title, label, true) :: !outline-lst-ref)
-    | 2 -> (outline-lst-ref <- (n, s-num ^ s-title, label, true) :: !outline-lst-ref)
-    | _ -> (outline-lst-ref <- (n, s-num ^ s-title, label, false) :: !outline-lst-ref)
+    | 1 -> (outline-lst <- (n, s-num ^ s-title, label, true) :: !outline-lst)
+    | 2 -> (outline-lst <- (n, s-num ^ s-title, label, true) :: !outline-lst)
+    | _ -> (outline-lst <- (n, s-num ^ s-title, label, false) :: !outline-lst)
   in
   let ib-num = read-inline sec-ctx (embed-string s-num) in
 
@@ -128,7 +128,7 @@ let-block ctx +{} ?:labelopt ?:outline-title-opt title inner =
     {}
   in
   let () = {} in
-    {} ctx label title outline-title-opt inner lst {}\n",
+    {} ctx label title outline-title-opt inner lst {} outline-lst-ref\n",
       sec_fun_name[(i - 1)],
       make_cout(i, depth),
       i,
