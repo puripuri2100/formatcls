@@ -67,6 +67,19 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
 
   let font_data = &v[font::NAME_FONT_DATA].as_array();
 
+  let paragraph_margin_top = &v[func::NAME_PARAGRAPH_MARGIN_TOP]
+    .as_str()
+    .unwrap_or(func::DEFAULT_PARAGRAPH_MARGIN_TOP);
+  let paragraph_margin_bottom = &v[func::NAME_PARAGRAPH_MARGIN_BOTTOM]
+    .as_str()
+    .unwrap_or(func::DEFAULT_PARAGRAPH_MARGIN_BOTTOM);
+  let leading = &v[func::NAME_LEADING]
+    .as_str()
+    .unwrap_or(func::DEFAULT_LEADING);
+  let min_gap_of_lines = &v[func::NAME_MIN_GAP_OF_LINES]
+    .as_str()
+    .unwrap_or(func::DEFAULT_MIN_GAP_OF_LINES);
+
   let header_fun = &v[doc::NAME_HEADER_FUN]
     .as_str()
     .unwrap_or(doc::DEFAULT_HEADER_FUN);
@@ -120,7 +133,12 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     page_size_str,
     space_str,
     font::set_set_fn(),
-    font::set_initial_context(),
+    func::set_initial_context(
+      paragraph_margin_top,
+      paragraph_margin_bottom,
+      leading,
+      min_gap_of_lines,
+    ),
     func::make_register_cross_reference_fun(),
     func::make_get_cross_reference_fun(),
     func::make_register_location_frame_fun(),
@@ -187,6 +205,10 @@ pub fn default_json() -> Value {
     sec::NAME_SEC_FUN_NAME  : sec::default_sec_fun_name(),
     sec::NAME_SEC_FUN       : sec::DEFAULT_SEC_FUN,
     title::NAME_TITLE_FUN   : title::DEFAULT_TITLE_FUN,
+    func::NAME_PARAGRAPH_MARGIN_TOP    : func::DEFAULT_PARAGRAPH_MARGIN_TOP,
+    func::NAME_PARAGRAPH_MARGIN_BOTTOM : func::DEFAULT_PARAGRAPH_MARGIN_BOTTOM,
+    func::NAME_MIN_GAP_OF_LINES        : func::DEFAULT_MIN_GAP_OF_LINES,
+    func::NAME_LEADING      : func::DEFAULT_LEADING,
   })
 }
 

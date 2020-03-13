@@ -95,3 +95,45 @@ pub fn make_toc_and_outline_lst() -> String {
 "
   .to_string()
 }
+
+pub const NAME_PARAGRAPH_MARGIN_TOP: &str = "paragraph-margin-top";
+pub const NAME_PARAGRAPH_MARGIN_BOTTOM: &str = "paragraph-margin-bottom";
+pub const NAME_LEADING: &str = "leading";
+pub const NAME_MIN_GAP_OF_LINES: &str = "min-gap-of-lines";
+
+pub const DEFAULT_PARAGRAPH_MARGIN_TOP: &str = "10pt";
+pub const DEFAULT_PARAGRAPH_MARGIN_BOTTOM: &str = "10pt";
+pub const DEFAULT_LEADING: &str = "17pt";
+pub const DEFAULT_MIN_GAP_OF_LINES: &str = "5pt";
+
+pub fn set_initial_context(
+  paragraph_margin_top: &str,
+  paragraph_margin_bottom: &str,
+  leading: &str,
+  min_gap_of_lines: &str,
+) -> String {
+  format!(
+    "
+% 基本となるctxの設定
+let ctx-get-initial-context l-width =
+  get-initial-context l-width (command \\math)
+    |> set-font-size main-font-size
+    |> set-dominant-wide-script Kana
+    |> set-language Kana Japanese
+    |> set-language HanIdeographic Japanese
+    |> set-cjk-font main-font-cjk
+    |> set-dominant-narrow-script Latin
+    |> set-language Latin English
+    |> set-latin-font main-font-latin
+    |> set-hyphen-penalty 100
+    |> set-math-font `lmodern`
+    |> set-manual-rising 0pt % 文字の上下の補正値
+    |> set-text-color Color.black
+    |> set-paragraph-margin {} {}
+    |> set-leading {}
+    |> set-min-gap-of-lines {}
+
+",
+    paragraph_margin_top, paragraph_margin_bottom, leading, min_gap_of_lines
+  )
+}

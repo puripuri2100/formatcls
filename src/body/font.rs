@@ -138,26 +138,3 @@ let set-latin-font font-name ctx =
   "
   .to_string()
 }
-
-pub fn set_initial_context() -> String {
-  "
-% 基本となるctxの設定
-let ctx-get-initial-context l-width =
-  get-initial-context l-width (command \\math)
-    |> set-font-size main-font-size
-    |> set-dominant-wide-script Kana
-    |> set-language Kana Japanese
-    |> set-language HanIdeographic Japanese
-    |> set-cjk-font main-font-cjk
-    |> set-dominant-narrow-script Latin
-    |> set-language Latin English
-    |> set-latin-font main-font-latin
-    |> set-hyphen-penalty 100
-    |> set-math-font `lmodern`
-    |> set-manual-rising 0pt % 文字の上下の補正値
-    |> set-text-color Color.black
-    |> set-paragraph-margin 10pt 10pt
-
-"
-  .to_string()
-}

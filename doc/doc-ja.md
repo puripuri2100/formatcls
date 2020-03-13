@@ -117,6 +117,10 @@ val document : 'a -> block-text -> document
 - title-fun : sec-funと同じような感じです。デフォルトは`make-title-bb`で、型は`ctx:context -> title:inline-text -> author:inline-text -> other:'a -> block-boxes`です。otherの中は何でも含めることができますが、ドキュメント関数に必要なレコードの`other`の部分に必要になります。
 - title-page : タイトルを独立のページにするかどうかの真偽値です。
 - toc-page : 目次を独立のページにするかどうかの真偽値です。
+- paragraph-margin-top : 段落の上部に作るスペースの大きさです。
+- paragraph-margin-bottom : 段落の下部に作るスペースの大きさです。
+- leading : 行送りの大きさです。
+- min-gap-of-lines : 行間の最小限の大きさです。
 
 デフォルトの設定が知りたい場合は`-d`オプションをつけて
 ```sh
