@@ -156,6 +156,7 @@ let ctx-get-initial-context l-width =
     |> set-math-font `lmodern`
     |> set-manual-rising 0pt % 文字の上下の補正値
     |> set-text-color Color.black
+    |> set-paragraph-margin 10pt 10pt
 
 "
   .to_string()

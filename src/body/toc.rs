@@ -36,60 +36,70 @@ let get-ib-width ib =
 
 let make-toc-bb ctx text-width label count-lst i title =
   let it-page = embed-string (s-get-cross-reference-page label) in
-  let ctx-1 =
-    ctx
-    |> set-cjk-font font-gothic
-    |> set-latin-font font-sans
-    |> set-font-size (main-font-size *' 1.2)
-  in
-  let ctx-2 =
-    ctx
-    |> set-font-size (main-font-size *' 1.1)
-  in
+  let toc-ctx =
     match i with
     | 1 ->
-      let ib-num =
-        count-lst
-        |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
-        |> List.fold-left (^) ` `
-        |> embed-string
-        |> read-inline ctx-1
-      in
-      let ib-title = read-inline ctx-1 {{#title;}} in
-      let ib-page = read-inline ctx-1 {{#it-page;}} in
-      inline-skip 3pt ++ ib-num ++ ib-title ++ inline-skip 5pt ++
-      make-dots-line ctx-1
-        (text-width -'
-          (get-ib-width ib-num) -'
-          (get-ib-width ib-title) -'
-          (get-ib-width ib-page) -'
-          13pt
-        ) ++ inline-skip 5pt ++ inline-fil ++ ib-page
-      |> ib-link-to-location-frame label
+      ctx
+      |> set-cjk-font font-gothic
+      |> set-latin-font font-sans
+      |> set-font-size (main-font-size *' 1.2)
+      |> set-paragraph-margin 5pt 5pt
     | 2 ->
-      inline-skip ((main-font-size *' 1.2) *' 1.0) ++
-      (count-lst
-        |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
-        |> List.fold-left (^) ` `
-        |> embed-string
-        |> read-inline ctx-2
-      ) ++
-      read-inline ctx-2 {{#title;}} ++
-      inline-fil ++
-      read-inline ctx-2 {{#it-page;}}
-      |> ib-link-to-location-frame label
+      ctx
+      |> set-font-size (main-font-size *' 1.1)
+      |> set-paragraph-margin 5pt 5pt
     | _ ->
-      inline-skip ((main-font-size *' 1.2) *' 2.0) ++
-      (count-lst
-        |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
-        |> List.fold-left (^) ` `
-        |> embed-string
-        |> read-inline ctx
-      ) ++
-      read-inline ctx {{#title;}} ++
-      inline-fil ++
-      read-inline ctx {{#it-page;}}
-      |> ib-link-to-location-frame label\n"
+      ctx
+      |> set-paragraph-margin 5pt 5pt
+  in
+  let main-ib =
+    match i with
+      | 1 ->
+        let ib-num =
+          count-lst
+          |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
+          |> List.fold-left (^) ` `
+          |> embed-string
+          |> read-inline toc-ctx
+        in
+        let ib-title = read-inline toc-ctx {{#title;}} in
+        let ib-page = read-inline toc-ctx {{#it-page;}} in
+        inline-skip 3pt ++ ib-num ++ ib-title ++ inline-skip 5pt ++
+        make-dots-line toc-ctx
+          (text-width -'
+            (get-ib-width ib-num) -'
+            (get-ib-width ib-title) -'
+            (get-ib-width ib-page) -'
+            13pt
+          ) ++ inline-skip 5pt ++ inline-fil ++ ib-page
+        |> ib-link-to-location-frame label
+      | 2 ->
+        inline-skip ((main-font-size *' 1.2) *' 1.0) ++
+        (count-lst
+          |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
+          |> List.fold-left (^) ` `
+          |> embed-string
+          |> read-inline toc-ctx
+        ) ++
+        read-inline toc-ctx {{#title;}} ++
+        inline-fil ++
+        read-inline toc-ctx {{#it-page;}}
+        |> ib-link-to-location-frame label
+      | _ ->
+        inline-skip ((main-font-size *' 1.2) *' 2.0) ++
+        (count-lst
+          |> List.map (fun n -> (if n <= 0 then ` ` else ((arabic n) ^ `. `#)))
+          |> List.fold-left (^) ` `
+          |> embed-string
+          |> read-inline toc-ctx
+        ) ++
+        read-inline toc-ctx {{#title;}} ++
+        inline-fil ++
+        read-inline toc-ctx {{#it-page;}}
+        |> ib-link-to-location-frame label
+      in
+      let main-bb = line-break true true toc-ctx main-ib in
+        main-bb +++ block-skip 5pt\n"
   )
 }
 
@@ -103,7 +113,7 @@ let make-toc-title-bb ctx main-bb =
     |> set-latin-font font-sans
     |> set-font-size 16pt
   in
-  let title-ib = {{目次}} |> read-inline title-ctx in
+  let title-ib = read-inline title-ctx {{目次}} ++ inline-fil in
   let title-bb = line-break true false title-ctx title-ib in
     title-bb +++ block-skip 5pt +++ main-bb
   "
@@ -146,7 +156,7 @@ pub fn make_toc_fun_str(toc_title_fun: &str) -> String {
   let bb-toc-main =
     !toc-lst-ref
     |> List.reverse
-    |> List.map (fun l -> l |> make-toc ctx-doc text-width |> line-break true true ctx-doc)
+    |> List.map (fun l -> l |> make-toc ctx-doc text-width)
     |> List.fold-left (+++) block-nil
     |> {} ctx-doc
   in

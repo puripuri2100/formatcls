@@ -74,16 +74,19 @@ let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
       |> set-cjk-font font-gothic
       |> set-latin-font font-sans
       |> set-font-size (main-font-size *' 1.5)
+      |> set-paragraph-margin 20pt 5pt
     | 2 -> 
       ctx
       |> set-cjk-font font-gothic
       |> set-latin-font font-sans
       |> set-font-size (main-font-size *' 1.3)
+      |> set-paragraph-margin 15pt 5pt
     | _ ->
       ctx
       |> set-cjk-font font-gothic
       |> set-latin-font font-sans
       |> set-font-size (main-font-size *' 1.2)
+      |> set-paragraph-margin 10pt 5pt
   in
   let s-num =
     count-lst
@@ -91,7 +94,7 @@ let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
     |> List.fold-left (^) ` `
   in
   let ib-title =
-    ib-register-location-frame label (read-inline sec-ctx title)
+    ib-register-location-frame label (read-inline sec-ctx title ++ inline-fil)
   in
   let s-title = extract-string ib-title in
   let ib-title-link = ib-register-cross-reference-page label s-title in
