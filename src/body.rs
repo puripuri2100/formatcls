@@ -111,8 +111,9 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
   let sec_fun_list = json_vec_to_str_vec(
     &v[sec::NAME_SEC_FUN_NAME]
       .as_array()
-      .unwrap_or(&vec![json!(null)]),
+      .unwrap_or(&vec![json!(null); sec::DEFAULT_SEC_DEPTH as usize]),
     None,
+    Some(&sec::default_sec_fun_name()),
   );
   let sec_fun = &v[sec::NAME_SEC_FUN]
     .as_str()
@@ -242,15 +243,20 @@ pub fn make_command_vec(v: &Value) -> Vec<String> {
   let sec_fun_list = json_vec_to_str_vec(
     &v[sec::NAME_SEC_FUN_NAME]
       .as_array()
-      .unwrap_or(&vec![json!(null)]),
+      .unwrap_or(&vec![json!(null); sec::DEFAULT_SEC_DEPTH as usize]),
     None,
+    Some(&sec::default_sec_fun_name()),
   );
   let mut sec_command_vec = sec::command_vec(sec_depth, sec_fun_list);
   let () = def_module_vec.append(&mut sec_command_vec);
   def_module_vec
 }
 
-fn json_vec_to_str_vec(j_vec: &Vec<Value>, default: Option<&str>) -> Vec<String> {
+pub fn json_vec_to_str_vec(
+  j_vec: &Vec<Value>,
+  default: Option<&str>,
+  default_vec: Option<&Vec<&str>>,
+) -> Vec<String> {
   let mut s_vec = vec![];
   let len = j_vec.len();
   for i in 0..len {
@@ -258,11 +264,26 @@ fn json_vec_to_str_vec(j_vec: &Vec<Value>, default: Option<&str>) -> Vec<String>
     let s_op = v.as_str();
     match s_op {
       None => match default {
-        None => {}
+        None => match default_vec {
+          None => {}
+          Some(ve) => s_vec.push(format!("{}", ve[i])),
+        },
         Some(s) => s_vec.push(format!("{}", s)),
       },
       Some(s) => s_vec.push(format!("{}", s)),
     }
   }
   s_vec
+}
+
+#[test]
+fn check_json_vec_to_str_vec() {
+  assert_eq!(
+    json_vec_to_str_vec(
+      &vec![json!(null); 3],
+      None,
+      Some(&vec!["hoge", "fuga", "piyo"])
+    ),
+    vec!["hoge".to_string(), "fuga".to_string(), "piyo".to_string()]
+  );
 }

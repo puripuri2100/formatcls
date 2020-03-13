@@ -24,7 +24,7 @@ fn parse(path: &str) -> Value {
 
 fn main() {
   let app = App::new("clapex")
-    .version("0.1.0")
+    .version("0.1.1")
     .arg(
       Arg::with_name("output")
         .help("Specify output file")
@@ -82,8 +82,8 @@ fn main() {
         .unwrap_or(&json_null_vec);
       let package = package::package(
         package_data,
-        json_vec_to_str_vec(require_list, package::DEFAULT_REQUIRE_PACKAGE_VEC_STR),
-        json_vec_to_str_vec(import_list, package::DEFAULT_IMPORT_PACKAGE_VEC_STR),
+        body::json_vec_to_str_vec(require_list, package::DEFAULT_REQUIRE_PACKAGE_VEC_STR, None),
+        body::json_vec_to_str_vec(import_list, package::DEFAULT_IMPORT_PACKAGE_VEC_STR, None),
       );
       let doc_fun_name = &config_data[module::NAME_DOC_FUNCTION_NAME]
         .as_str()
@@ -116,21 +116,4 @@ fn main() {
       serde_json::to_string_pretty(&default_json).unwrap_or_default(),
     ),
   };
-}
-
-fn json_vec_to_str_vec(j_vec: &Vec<Value>, default: Option<&str>) -> Vec<String> {
-  let mut s_vec = vec![];
-  let len = j_vec.len();
-  for i in 0..len {
-    let v = &j_vec[i];
-    let s_op = v.as_str();
-    match s_op {
-      None => match default {
-        None => {}
-        Some(s) => s_vec.push(format!("{}", s)),
-      },
-      Some(s) => s_vec.push(format!("{}", s)),
-    }
-  }
-  s_vec
 }

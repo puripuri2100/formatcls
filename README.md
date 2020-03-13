@@ -1,5 +1,6 @@
 ![](https://github.com/puripuri2100/formatcls/workflows/Rust/badge.svg)
 
+formatcls version 0.1.1
 
 # formatcls
 
