@@ -10,7 +10,7 @@ install: src
 
 test: t
 	target/debug/formatcls -o t/test.satyh -c t/t.json
-	satysfi t/t.saty -o t/t.pdf
+	satysfi --debug-show-bbox --debug-show-space --debug-show-block-bbox --debug-show-block-space t/t.saty -o t/t.pdf
 	target/debug/formatcls -d t/default.json
 	target/debug/formatcls -o t/default.satyh -c t/default.json
 	satysfi t/default.saty -o t/default.pdf

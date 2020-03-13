@@ -89,6 +89,9 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
   let toc_fun = &v[toc::NAME_TOC_FUN]
     .as_str()
     .unwrap_or(toc::DEFAULT_TOC_FUN);
+  let toc_title_fun = &v[toc::NAME_TOC_TITLE_FUN]
+    .as_str()
+    .unwrap_or(toc::DEFAULT_TOC_TITLE_FUN);
   let sec_depth = &v[sec::NAME_SEC_DEPTH]
     .as_u64()
     .unwrap_or(sec::DEFAULT_SEC_DEPTH);
@@ -131,7 +134,7 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     doc::make_document_function(
       &document_function_name,
       title_str,
-      toc::make_toc_fun_str(),
+      toc::make_toc_fun_str(toc_title_fun),
       header_fun,
       footer_fun,
       if_title_page,
@@ -175,10 +178,11 @@ pub fn default_json() -> Value {
     font::NAME_FONT_DATA    : json!(to_font_data_vec(font::make_default_font_vec())),
     doc::NAME_HEADER_FUN    : doc::DEFAULT_HEADER_FUN,
     doc::NAME_FOOTER_FUN    : doc::DEFAULT_FOOTER_FUN,
-    doc::NAME_IF_TITLE_PAGE    : doc::DEFAULT_IF_TITLE_PAGE,
-    doc::NAME_IF_TOC_PAGE      : doc::DEFAULT_IF_TOC_PAGE,
+    doc::NAME_IF_TITLE_PAGE : doc::DEFAULT_IF_TITLE_PAGE,
+    doc::NAME_IF_TOC_PAGE   : doc::DEFAULT_IF_TOC_PAGE,
     toc::NAME_TOC_DEPTH     : toc::DEFAULT_TOC_DEPTH,
     toc::NAME_TOC_FUN       : toc::DEFAULT_TOC_FUN,
+    toc::NAME_TOC_TITLE_FUN : toc::DEFAULT_TOC_TITLE_FUN,
     sec::NAME_SEC_DEPTH     : sec::DEFAULT_SEC_DEPTH,
     sec::NAME_SEC_FUN_NAME  : sec::default_sec_fun_name(),
     sec::NAME_SEC_FUN       : sec::DEFAULT_SEC_FUN,

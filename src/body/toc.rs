@@ -1,8 +1,10 @@
 pub const NAME_TOC_DEPTH: &str = "toc-depth";
 pub const NAME_TOC_FUN: &str = "toc-fun";
+pub const NAME_TOC_TITLE_FUN: &str = "toc-title-fun";
 
 pub const DEFAULT_TOC_DEPTH: u64 = 2;
 pub const DEFAULT_TOC_FUN: &str = "make-toc-bb";
+pub const DEFAULT_TOC_TITLE_FUN: &str = "make-toc-title-bb";
 
 fn make_toc_type(depth: u64) -> String {
   let mut main_str = "type toc-cls =\n".to_string();
@@ -91,6 +93,23 @@ let make-toc-bb ctx text-width label count-lst i title =
   )
 }
 
+fn make_title_fun() -> String {
+  format!(
+    "
+let make-toc-title-bb ctx main-bb =
+  let title-ctx =
+    ctx
+    |> set-cjk-font font-gothic
+    |> set-latin-font font-sans
+    |> set-font-size 16pt
+  in
+  let title-ib = {{目次}} |> read-inline title-ctx in
+  let title-bb = line-break true false title-ctx title-ib in
+    title-bb +++ block-skip 5pt +++ main-bb
+  "
+  )
+}
+
 fn make_toc_fun(depth: u64, fun_name: &str) -> String {
   let mut main_str = "let make-toc ctx text-width t =\n  match t with\n".to_string();
   for i in 1..(depth + 1) {
@@ -110,16 +129,18 @@ pub fn make_toc_str(depth: &u64, toc_fun: &str) -> String {
 % Begin Table of Contents ==============
 {}\n
 {}\n
+{}\n
 {}
 % End Table of Contents ================  
 \n",
     make_toc_type(*depth),
     make_bb_fun(),
+    make_title_fun(),
     make_toc_fun(*depth, toc_fun)
   )
 }
 
-pub fn make_toc_fun_str() -> String {
+pub fn make_toc_fun_str(toc_title_fun: &str) -> String {
   format!(
     "
   let bb-toc-main =
@@ -127,7 +148,9 @@ pub fn make_toc_fun_str() -> String {
     |> List.reverse
     |> List.map (fun l -> l |> make-toc ctx-doc text-width |> line-break true true ctx-doc)
     |> List.fold-left (+++) block-nil
+    |> {} ctx-doc
   in
-  "
+  ",
+    toc_title_fun
   )
 }

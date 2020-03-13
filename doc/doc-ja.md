@@ -113,9 +113,10 @@ val document : 'a -> block-text -> document
 - sec-fun : 章や節のタイトルなどを作る関数です。デフォルトでは`make-sec-bb`ですが、自分で指定することもできます）。型は`ctx:context -> label:string -> count-lst:int list -> i:int -> title:inline-text -> outline-lst:((int, string, string, bool) list) ref -> outline-title-opt:inline-text option -> main:block-text -> block-boxes`です。
 - toc-depth : 目次の表示深さです。sec-depthより大きいと、自動的にsec-depthと同じ大きさになります。
 - toc-fun : sec-funと同じような感じです。デフォルトは`make-toc-bb`で、型は`ctx:context -> text-width:length -> label:string -> count-lst:int list -> i:int -> title:inline-text -> inline-boxes`です。
+- toc-title-fun : 目次にデコレーションをする関数です。デフォルトは`make-toc-title-bb`で、型は`ctx:contex -> main-bb:block-boxes -> block-boxes`です。
 - title-fun : sec-funと同じような感じです。デフォルトは`make-title-bb`で、型は`ctx:context -> title:inline-text -> author:inline-text -> other:'a -> block-boxes`です。otherの中は何でも含めることができますが、ドキュメント関数に必要なレコードの`other`の部分に必要になります。
-- titlepage : タイトルを独立のページにするかどうかの真偽値です。
-- tocpage : 目次を独立のページにするかどうかの真偽値です。
+- title-page : タイトルを独立のページにするかどうかの真偽値です。
+- toc-page : 目次を独立のページにするかどうかの真偽値です。
 
 デフォルトの設定が知りたい場合は`-d`オプションをつけて
 ```sh

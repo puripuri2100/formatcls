@@ -1,5 +1,5 @@
-pub const NAME_IF_TITLE_PAGE: &str = "titlepage";
-pub const NAME_IF_TOC_PAGE: &str = "tocpage";
+pub const NAME_IF_TITLE_PAGE: &str = "title-page";
+pub const NAME_IF_TOC_PAGE: &str = "toc-page";
 
 pub const DEFAULT_IF_TITLE_PAGE: bool = false;
 pub const DEFAULT_IF_TOC_PAGE: bool = false;
