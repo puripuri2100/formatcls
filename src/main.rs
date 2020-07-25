@@ -109,11 +109,10 @@ fn main() {
     body::default_json(),
   );
 
-  let _ = match default_name {
-    None => {}
-    Some(s) => write_file(
+  if let Some(s) = default_name {
+    write_file(
       s,
       serde_json::to_string_pretty(&default_json).unwrap_or_default(),
-    ),
+    )
   };
 }
