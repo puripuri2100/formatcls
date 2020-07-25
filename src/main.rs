@@ -12,7 +12,7 @@ pub mod default;
 pub mod module;
 pub mod package;
 
-fn write_file(file_name: String, text: String) -> () {
+fn write_file(file_name: String, text: String) {
   let mut file = File::create(file_name).unwrap();
   file.write_all(text.as_bytes()).unwrap();
 }
@@ -55,17 +55,17 @@ fn main() {
 
   if let Some(output) = matches.value_of("output") {
     output_name = Some(output.to_string());
-    print!("Value for output: {}\n", output);
+    println!("Value for output: {}", output);
   }
 
   if let Some(config) = matches.value_of("config") {
     config_name = Some(config.to_string());
-    print!("Value for config: {}\n", config);
+    println!("Value for config: {}", config);
   }
 
   if let Some(default) = matches.value_of("default") {
     default_name = Some(default.to_string());
-    print!("Output for default: {}\n", default);
+    println!("Output for default: {}", default);
   }
 
   let package_data = vec!["annot".to_string(), "list".to_string(), "math".to_string()];

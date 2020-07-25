@@ -162,18 +162,7 @@ pub fn body(v: &Value, document_function_name: &str) -> String {
     command::DEF_P_CMD.to_string(),
     command::DEF_PN_CMD.to_string(),
   ];
-  let value_str = vec_to_str(&def_value_vec);
-  value_str
-}
-
-fn vec_to_str(v: &Vec<String>) -> String {
-  let len = v.len();
-  let mut s = String::new();
-  for i in 0..len {
-    let st = format!("{}", v[i]);
-    s.push_str(&st)
-  }
-  s
+  def_value_vec.concat()
 }
 
 pub fn default_json() -> Value {
@@ -253,7 +242,7 @@ pub fn make_command_vec(v: &Value) -> Vec<String> {
 }
 
 pub fn json_vec_to_str_vec(
-  j_vec: &Vec<Value>,
+  j_vec: &[Value],
   default: Option<&str>,
   default_vec: Option<&Vec<&str>>,
 ) -> Vec<String> {
@@ -262,15 +251,14 @@ pub fn json_vec_to_str_vec(
   for i in 0..len {
     let v = &j_vec[i];
     let s_op = v.as_str();
-    match s_op {
-      None => match default {
-        None => match default_vec {
-          None => {}
-          Some(ve) => s_vec.push(format!("{}", ve[i])),
-        },
-        Some(s) => s_vec.push(format!("{}", s)),
-      },
-      Some(s) => s_vec.push(format!("{}", s)),
+    if let Some(s) = s_op {
+      s_vec.push(s.to_owned());
+    }
+    else if let Some(s) = default {
+      s_vec.push(s.to_owned())
+    }
+    else if let Some(ve) = default_vec {
+      s_vec.push(ve[i].to_owned())
     }
   }
   s_vec

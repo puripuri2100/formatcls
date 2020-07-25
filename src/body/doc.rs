@@ -98,17 +98,7 @@ pub fn make_document_function(
     OUTLINE.to_string(),
     DOC.to_string(),
   ];
-  let main_str = vec_to_str(&v);
+  let main_str = v.concat();
 
   format!("let {} config bt ={}", function_name, main_str)
-}
-
-fn vec_to_str(v: &Vec<String>) -> String {
-  let len = v.len();
-  let mut s = String::new();
-  for i in 0..len {
-    let st = format!("{}", v[i]);
-    s.push_str(&st)
-  }
-  s
 }
