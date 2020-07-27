@@ -16,7 +16,7 @@ fn make_toc_type(depth: u64) -> String {
 }
 
 fn make_bb_fun() -> String {
-    "
+  "
 let make-dots-line ctx w =
   let-rec sub n ib =
     if n <= 0 then
@@ -98,11 +98,12 @@ let make-toc-bb ctx text-width label count-lst i title =
         |> ib-link-to-location-frame label
       in
       let main-bb = line-break true true toc-ctx main-ib in
-        main-bb +++ block-skip 5pt\n".to_owned()
+        main-bb +++ block-skip 5pt\n"
+    .to_owned()
 }
 
 fn make_title_fun() -> String {
-    "
+  "
 let make-toc-title-bb ctx main-bb =
   let title-ctx =
     ctx
@@ -113,7 +114,8 @@ let make-toc-title-bb ctx main-bb =
   let title-ib = read-inline title-ctx {{目次}} ++ inline-fil in
   let title-bb = line-break true false title-ctx title-ib in
     title-bb +++ block-skip 5pt +++ main-bb
-  ".to_owned()
+  "
+  .to_owned()
 }
 
 fn make_toc_fun(depth: u64, fun_name: &str) -> String {

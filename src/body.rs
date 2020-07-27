@@ -253,11 +253,9 @@ pub fn json_vec_to_str_vec(
     let s_op = v.as_str();
     if let Some(s) = s_op {
       s_vec.push(s.to_owned());
-    }
-    else if let Some(s) = default {
+    } else if let Some(s) = default {
       s_vec.push(s.to_owned())
-    }
-    else if let Some(ve) = default_vec {
+    } else if let Some(ve) = default_vec {
       s_vec.push(ve[i].to_owned())
     }
   }
