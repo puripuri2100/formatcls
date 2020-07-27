@@ -9,12 +9,12 @@ pub fn default_sec_fun_name() -> Vec<&'static str> {
   vec!["section", "subsection", "subsubsection"]
 }
 
-fn set_sec_fun_vec(depth: usize, sec_fun_list: &Vec<String>) -> Vec<String> {
+fn set_sec_fun_vec(depth: usize, sec_fun_list: &[String]) -> Vec<String> {
   let mut stack = vec![];
   let len = sec_fun_list.len();
   for i in 1..(depth + 1) {
     let s = if i <= len {
-      format!("{}", &sec_fun_list[(i - 1)])
+      sec_fun_list[(i - 1)].clone()
     } else {
       format!("sec{}", i)
     };
@@ -24,18 +24,16 @@ fn set_sec_fun_vec(depth: usize, sec_fun_list: &Vec<String>) -> Vec<String> {
 }
 
 fn make_sec_num_ref(sec_depth: &u64) -> String {
-  let mut main_str = String::new();
-  for i in 1..(sec_depth + 1) {
-    let s = format!("let-mutable sec{}-count <- 0\n", i);
-    main_str.push_str(&s)
-  }
-  main_str
+  (1..sec_depth + 1)
+    .map(|i| format!("let-mutable sec{}-count <- 0\n", i))
+    .collect::<Vec<String>>()
+    .concat()
 }
 
 fn add_toc_lst(i: usize, toc_depth_64: &u64) -> String {
   let toc_depth = *toc_depth_64 as usize;
   if i > toc_depth {
-    format!("()")
+    "()".to_owned()
   } else {
     format!(
       "toc-lst-ref <- (Sec{}(label, title, lst)) :: !toc-lst-ref",
@@ -55,17 +53,15 @@ fn make_cout(n: usize, depth_64: &u64) -> String {
 }
 
 fn make_num_lst(n: usize) -> String {
-  let mut main_str = String::new();
-  for i in 1..(n + 1) {
-    let s = format!("!sec{}-count; ", i);
-    main_str.push_str(&s)
-  }
+  let main_str = (1..n + 1)
+    .map(|i| format!("!sec{}-count; ", i))
+    .collect::<Vec<String>>()
+    .concat();
   format!("[{}]", main_str)
 }
 
 fn make_sec_bb_fun() -> String {
-  format!(
-    "
+  "
 let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
   let sec-ctx =
     match i with
@@ -113,10 +109,10 @@ let make-sec-bb ctx label count-lst i title outline-lst outline-title-opt main =
   let bb-inner = read-block ctx main in
     bb-title +++ bb-inner
   \n"
-  )
+    .to_owned()
 }
 
-fn make_sec_cmd(sec_fun_name: &Vec<String>, sec_fun: &str, depth: &u64, toc_depth: &u64) -> String {
+fn make_sec_cmd(sec_fun_name: &[String], sec_fun: &str, depth: &u64, toc_depth: &u64) -> String {
   let mut main_str = String::new();
   let len = sec_fun_name.len();
   for i in 1..(len + 1) {
@@ -169,15 +165,15 @@ pub fn make_sec_str(
 
 pub fn command_vec(sec_depth: &u64, sec_fun_list: Vec<String>) -> Vec<String> {
   let sec_vec = set_sec_fun_vec(*sec_depth as usize, &sec_fun_list);
-  let mut stack = vec![];
-  for v in sec_vec.iter() {
-    let s = format!(
-      "direct +{} : [string?; inline-text?; inline-text; block-text] block-cmd",
-      v
-    );
-    stack.push(s)
-  }
-  stack
+  sec_vec
+    .into_iter()
+    .map(|v| {
+      format!(
+        "direct +{} : [string?; inline-text?; inline-text; block-text] block-cmd",
+        v
+      )
+    })
+    .collect()
 }
 
 #[test]

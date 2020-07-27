@@ -53,9 +53,8 @@ pub fn set_font_data(font_data_opt: &&Option<&Vec<Value>>) -> String {
   };
   let font_vec = set_font_vec(&font_data);
   let mut s = String::new();
-  let vec_len = font_vec.len();
-  for i in 0..vec_len {
-    let (tag, name, ratio, correction) = &font_vec[i];
+  for font in font_vec {
+    let (tag, name, ratio, correction) = &font;
     let st = match name {
       None => String::new(),
       Some(n) => format!(
@@ -68,7 +67,7 @@ pub fn set_font_data(font_data_opt: &&Option<&Vec<Value>>) -> String {
   s
 }
 
-fn set_font_vec(font_data: &Vec<Value>) -> Vec<(String, Option<String>, String, String)> {
+fn set_font_vec(font_data: &[Value]) -> Vec<(String, Option<String>, String, String)> {
   let mut stack = vec![];
   let mut data_vec = vec![];
   for j in font_data.iter() {

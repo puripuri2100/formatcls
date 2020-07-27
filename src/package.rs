@@ -24,20 +24,18 @@ pub fn package(default: Vec<String>, require: Vec<String>, import: Vec<String>) 
 }
 
 fn make_require(v: Vec<String>) -> String {
-  let len = v.len();
   let mut st = String::new();
-  for i in 0..len {
-    let s = format!("@require: {}\n", v[i]);
+  for v_elem in v {
+    let s = format!("@require: {}\n", v_elem);
     st.push_str(&s)
   }
   st
 }
 
 fn make_import(v: Vec<String>) -> String {
-  let len = v.len();
   let mut st = String::new();
-  for i in 0..len {
-    let s = format!("@import: {}\n", v[i]);
+  for v_elem in v {
+    let s = format!("@import: {}\n", v_elem);
     st.push_str(&s)
   }
   st
