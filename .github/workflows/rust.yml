@@ -9,6 +9,9 @@ jobs:
     strategy:
       matrix:
         operating-system: [macos-latest, ubuntu-latest, windows-latest]
+        satysfi-version: [slim]
+    container:
+      image: amutake/satysfi: ${{ matrix.satysfi-version }}
 
     steps:
     - uses: actions/checkout@v2
@@ -22,4 +25,5 @@ jobs:
     - name: Lint
       run: cargo clippy -- -D warnings
     - name: Run tests
+      run: make test
       run: cargo test --verbose

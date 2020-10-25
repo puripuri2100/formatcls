@@ -24,7 +24,7 @@ let make-dots-line ctx w =
     else
       ib ++ (sub (n - 1) ib)
   in
-  let ib = read-inline ctx {{.}} ++ inline-skip 1pt in
+  let ib = read-inline ctx {.} ++ inline-skip 1pt in
   let wdot = get-natural-width ib in
   let n = (round (w /' wdot)) - 1 in
     inline-fil ++ (sub n ib)
@@ -61,8 +61,8 @@ let make-toc-bb ctx text-width label count-lst i title =
           |> embed-string
           |> read-inline toc-ctx
         in
-        let ib-title = read-inline toc-ctx {{#title;}} in
-        let ib-page = read-inline toc-ctx {{#it-page;}} in
+        let ib-title = read-inline toc-ctx {#title;} in
+        let ib-page = read-inline toc-ctx {#it-page;} in
         inline-skip 3pt ++ ib-num ++ ib-title ++ inline-skip 5pt ++
         make-dots-line toc-ctx
           (text-width -'
@@ -80,9 +80,9 @@ let make-toc-bb ctx text-width label count-lst i title =
           |> embed-string
           |> read-inline toc-ctx
         ) ++
-        read-inline toc-ctx {{#title;}} ++
+        read-inline toc-ctx {#title;} ++
         inline-fil ++
-        read-inline toc-ctx {{#it-page;}}
+        read-inline toc-ctx {#it-page;}
         |> ib-link-to-location-frame label
       | _ ->
         inline-skip ((main-font-size *' 1.2) *' 2.0) ++
@@ -92,9 +92,9 @@ let make-toc-bb ctx text-width label count-lst i title =
           |> embed-string
           |> read-inline toc-ctx
         ) ++
-        read-inline toc-ctx {{#title;}} ++
+        read-inline toc-ctx {#title;} ++
         inline-fil ++
-        read-inline toc-ctx {{#it-page;}}
+        read-inline toc-ctx {#it-page;}
         |> ib-link-to-location-frame label
       in
       let main-bb = line-break true true toc-ctx main-ib in
@@ -111,7 +111,7 @@ let make-toc-title-bb ctx main-bb =
     |> set-latin-font font-sans
     |> set-font-size 16pt
   in
-  let title-ib = read-inline title-ctx {{目次}} ++ inline-fil in
+  let title-ib = read-inline title-ctx {目次} ++ inline-fil in
   let title-bb = line-break true false title-ctx title-ib in
     title-bb +++ block-skip 5pt +++ main-bb
   "
