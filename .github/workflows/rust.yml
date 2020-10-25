@@ -22,4 +22,8 @@ jobs:
     - name: Lint
       run: cargo clippy -- -D warnings
     - name: Run tests
-      run: cargo test --verbose
+      run: |
+        cargo run -- -d t/default.json
+        cargo run -- -o t/default.satyh -c t/default.json
+        docker run --rm -v $(pwd):/satysfi amutake/satysfi:slim t/default.saty -o t/default.pdf
+        cargo test --verbose
