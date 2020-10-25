@@ -23,7 +23,7 @@ fn parse(path: &str) -> Value {
 }
 
 fn main() {
-  let app = App::new("clapex")
+  let app = App::new("formatcls")
     .version("0.1.1")
     .arg(
       Arg::with_name("output")
