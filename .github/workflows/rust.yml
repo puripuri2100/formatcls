@@ -15,18 +15,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install stable
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-      - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: |
-            cargo build --verbose
-            cargo fmt --all -- --check
-            cargo clippy -- -D warnings
-            make test
-            cargo test --verbose
+      - name: build
+        run: |
+          cargo build --verbose
+          cargo fmt --all -- --check
+          cargo clippy -- -D warnings
+          make test
+          cargo test --verbose
