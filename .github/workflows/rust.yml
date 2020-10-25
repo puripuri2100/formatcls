@@ -11,7 +11,7 @@ jobs:
         operating-system: [macos-latest, ubuntu-latest, windows-latest]
         satysfi-version: [slim]
     container:
-      image: amutake/satysfi: ${{ matrix.satysfi-version }}
+      image: amutake/satysfi:${{ matrix.satysfi-version }}
 
     steps:
     - uses: actions/checkout@v2
