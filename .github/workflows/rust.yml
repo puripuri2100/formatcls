@@ -1,4 +1,4 @@
-name: CI
+name: Rust
 
 on: [push,pull_request]
 
@@ -8,17 +8,18 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest]
-        satysfi-version: [slim]
-    container:
-      image: amutake/satysfi:${{ matrix.satysfi-version }}
+        operating-system: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: build
-        run: |
-          cargo build --verbose
-          cargo fmt --all -- --check
-          cargo clippy -- -D warnings
-          make test
-          cargo test --verbose
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        rustup component add rustfmt
+        rustup component add clippy
+        cargo build --verbose
+    - name: Fmt check
+      run: cargo fmt --all -- --check
+    - name: Lint
+      run: cargo clippy -- -D warnings
+    - name: Run tests
+      run: cargo test --verbose
